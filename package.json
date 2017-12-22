@@ -1,0 +1,29 @@
+{
+  "name": "ryan_geyer_portfolio",
+  "version": "1.0.0",
+  "description": "My portfolio site, http://rgeyer.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "\"echo \\\"Tests complete\\\"\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "\u0016https://github.com/Gyanreyer/Portfolio.git"
+  },
+  "keywords": [
+    "Portfolio",
+    "Ryan",
+    "Geyer",
+    "C#",
+    "JavaScript",
+    "Node",
+    "Unity",
+    "Developer",
+    "RIT",
+    "Game",
+    "Design",
+    "Development"
+  ],
+  "author": "Ryan Geyer",
+  "license": "ISC"
+}
