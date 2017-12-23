@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project: {{name}}</title>
+    
+    <link rel="stylesheet" type="text/css" href="/assets/style/project-style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/style/style.css">
+    
+    <link rel="icon" href="../../resources/favicon.png" type="image/x-icon">
+</head>
+<body>
+    <!--Need to make a left arrow icon-->
+    <div id="backButton"><a href="../../#projects" class="fade-hover"><i class="icon-left"></i><span>Back to projects</span></a></div>
+    
+    <div id="main">
+    <h1>{{name}}</h1>
+    <h2 id="date">{{date}}</h2>
+    
+    <hr>
+    
+    <video src="/assets/projects/{{pathName}}/demo.mp4" autoplay loop></video>
+    
+    <h2>What it is</h2>
+    <p>{{{description}}}</p>
+
+    <h2>What I used</h2>
+    <p>{{{technologies}}}</p>
+    
+    <h2>Check it out</h2>
+    <p>{{{links}}}</p>
+    
+    </div>
+</body>
+</html>

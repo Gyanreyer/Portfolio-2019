@@ -2,13 +2,14 @@
   "name": "ryan_geyer_portfolio",
   "version": "1.0.0",
   "description": "My portfolio site, http://rgeyer.com",
-  "main": "index.js",
+  "main": "./server/app.js",
   "scripts": {
-    "test": "\"echo \\\"Tests complete\\\"\""
+    "watch": "gulp watch",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
-    "url": "\u0016https://github.com/Gyanreyer/Portfolio.git"
+    "url": "https://github.com/Gyanreyer/Portfolio.git"
   },
   "keywords": [
     "Portfolio",
@@ -25,5 +26,27 @@
     "Development"
   ],
   "author": "Ryan Geyer",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-babili": "^0.1.4",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.13.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-eslint": "^4.0.0",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-sass": "^3.1.0",
+    "node-sass": "^4.7.2",
+    "nodemon": "^1.14.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.1",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "serve-favicon": "^2.4.5"
+  }
 }

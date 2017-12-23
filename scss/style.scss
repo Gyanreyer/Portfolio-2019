@@ -1,0 +1,418 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500');
+
+@font-face{
+    font-family: 'Bebas-Bold';
+    src: url('../resources/fonts/BebasNeue%20Bold.otf');
+}
+
+@font-face{
+    font-family: 'Bebas-Light';
+    src: url('../resources/fonts/BebasNeue%20Light.otf');
+}
+
+html,body{
+    height: 100%;
+}
+
+body{
+    margin: 0;
+    
+    font-family: 'Raleway',sans-serif;
+
+    color: #444;
+}
+
+#top-buttons{
+    top: 0;
+    right: 0;
+    position: absolute;
+    
+    padding-top: 1%;
+    padding-right: 2%;
+    
+    
+    font-size: 1.3em;
+    
+    z-index: 2;
+    
+    color: #444;
+    
+    font-weight: 500;
+    
+    cursor: pointer;
+    
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#top-buttons a{
+    margin: 0 2%;
+}
+
+.icon-circle{
+    font-size: .5em;
+}
+
+.icon-circle:after{
+    
+    vertical-align: middle;
+}
+
+a {
+    color: inherit;
+}
+
+.fade-hover{
+    transition: opacity .2s;
+}
+
+.fade-hover:hover{
+    opacity: .75;
+}
+
+h1{
+    font-family: 'Bebas-Bold', sans-serif;
+    letter-spacing: 2px;
+}
+
+h2{
+    font-family: 'Bebas-Light', sans-serif;
+    letter-spacing: 2px;
+}
+
+.page-section{
+    width: 100%;
+    padding-bottom: 5%;
+}
+
+.section-header{
+    margin: 0;
+    padding: 1.5% 0 1% 0;
+    text-align: center;
+    font-size: 6em;
+}
+
+#start{
+    min-height: 90%;
+    
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+    
+    padding: 0;
+}
+
+#logo-content{
+    width: 27%;
+    min-width: 300px;
+    margin: 0 auto;
+    
+    text-align: center;
+}
+
+#logo-content h1{
+    margin: 25px 0 5px 0;  
+    font-size: 6em;
+    line-height: 1em;
+}
+#logo-content h2{
+    margin: 0;
+    font-size: 2.5em;
+}
+
+#logo-content img{
+    width: 100%;
+}
+
+/*PROJECTS*/
+#projects{
+    background-color: #2c9b95;
+    color: white;
+}
+
+#projects-container{
+    width: 55%;
+    margin: 0 22.5% 2% 22.5%;
+    
+    display: flex;
+    flex-flow: row wrap;
+    justify-content:space-between;
+}
+
+.project{
+    min-width: 240px;
+    
+    height: auto;
+    margin: 1%;
+    
+    flex: 1 0 30%;
+    
+    position: relative;
+    
+    background-color: black;
+}
+
+.project:hover img {
+    opacity: .5;
+}
+
+.project:hover .description{
+    opacity: 1;
+}
+
+.project img{
+    width: 100%;
+    margin: 0;
+    
+    opacity: 1;
+    
+    position: relative;
+    display: block;
+    
+    transition: opacity .2s ease-in-out;
+}
+
+.description {
+        
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    
+    padding: 5%;
+    margin: 0;
+    
+    text-align: center;
+    
+    text-shadow: 1px 1px 1px black;  
+      
+    display: flex;
+    
+    flex-direction: column;
+    flex: 1 0 auto;
+    justify-content:center;
+    align-items: center;
+    
+    z-index: 1;
+    pointer-events: none;
+    
+    opacity: 0;    
+    
+    transition: opacity .2s ease-in-out;
+
+}
+
+.project-title{
+    font-family: 'Bebas-Light';
+    letter-spacing: 2px;
+    font-size: 3.5em;
+    
+    margin: 0 0 2% 0;
+    
+    line-height: .9em;
+}
+
+.project-desc{    
+    font-size: 1.1em;
+    line-height: 1.2em;
+    margin: 0;
+}
+
+.empty-project{
+    height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+/*END PROJECTS*/
+
+/*ABOUT*/
+#about{
+    color: white;
+    background-color: #3d9965;
+}
+
+#about p{
+    font-size: 1.75em;
+    
+    margin: 0 25% 2% 25%;
+    
+    width: 50%;
+    
+    text-indent: 1em;
+    
+    line-height: 1.2em;
+}
+
+#resume-download{
+    text-indent: 0 !important;
+    font-weight: bold;
+}
+
+/*END ABOUT*/
+
+
+/*CONTACT*/
+#contact{
+    background-color: #0f3b4b;
+    color: white;
+}
+
+#contact-form{
+    width: 50%;
+    margin: 0 25%;
+}
+
+label{
+    display: inline;
+    font-size: 1.5em;
+    
+    transition: color .25s ease-in-out;
+}
+
+input{
+
+    font-size: 1.5em;
+    
+    vertical-align: middle;
+}
+
+.input{
+    margin: 0 0 2% 2%;
+    width: 75%;
+    
+    float: right;
+    line-height: 1.25em;
+}
+
+#message {
+
+    vertical-align: top;
+
+    font-size: 1.75em;
+}
+
+.spacer{
+    clear:both;
+}
+
+#submit {
+    
+    font-size: 1.4em;
+    
+    margin: 0;
+    
+    border: none;
+    padding: .5% 1%;
+    
+    background-color: #489;
+    color: white;
+    
+    cursor: pointer;
+    
+    float: right;
+    
+}
+
+#submit:hover {        
+    background-color: #4490A0;
+}
+
+#afterSubmit{
+    background-color: #5A8;
+    
+    padding: 2%;
+    margin-bottom: 3%;
+    width: 96%;
+    
+    clear: both;
+    
+    display: none;
+    
+    font-size: 1.2em;
+}
+
+.row{
+    display: block;
+    clear: both;
+}
+
+/*END CONTACT*/
+
+
+
+/*FOOTER*/
+#footer{
+    background-color: #444;
+    color: white;
+    margin: 0;
+    padding: .75% 0;
+    
+    text-align: center;
+}
+
+#footer img{
+    width: 2%;
+    min-width: 30px;
+    
+    margin: 0 .75%;
+}
+
+#footer p{
+    text-align: center;
+    font-size: 1.1em;
+    margin: .5% 0 0 0;
+}
+/*END FOOTER*/
+
+
+@media screen and (max-width:1600px){
+    body{
+        font-size: .8em;
+    }
+    
+    #projects-container{
+        width: 70%;
+        margin-left: 15%;
+        margin-right: 15%;
+    }
+}
+
+@media screen and (max-width:1280px){
+    .section-header, #logo-content h1{
+        font-size: 5em;
+    }
+    
+    #about p, #contact-form{
+        width: 75%;
+        margin-left: 12.5%;
+        margin-right: 12.5%;
+    }
+}
+
+@media screen and (max-width:720px){
+    .section-header{
+        font-size: 4em;
+    }
+    
+    .page-section{
+        padding-bottom: 7%;
+    }
+    
+    label{
+        display: block;
+        margin-bottom: .2em;
+    }
+    
+    .input{
+        width: 85%;
+    }
+    
+    #submit{
+        width: 87%;
+    }
+    
+    .project:hover .description{
+        opacity: 0;
+    }
+    
+}
