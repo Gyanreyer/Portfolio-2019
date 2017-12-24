@@ -1,9 +1,167 @@
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ryan Geyer</title>
+
+    <link rel="stylesheet" href="/assets/style/style.css">
+    <link rel="icon" href="../../resources/favicon.png" type="image/x-icon">
 </head>
+
 <body>
-    <script src="/assets/main.js"></script>
+    <div id="top-buttons">
+        <a href="#contact" id="contact-button" class="fade-hover">Contact</a>
+           &bull;
+        <a href="downloads/Ryan%20Geyer%20Resume.pdf" class="fade-hover">Resume</a>
+    </div>
+
+    <div class="page-section" id="start">
+        <div id="logo-content">
+            <img src="resources/logo.png" alt="RG logo" />
+            <h1>Ryan Geyer</h1>
+            <h2>Web and Game Developer</h2>
+        </div>
+    </div>
+
+    <div class="page-section" id="projects">
+        <h1 class="section-header">Things I've Made</h1>
+
+        <div id="projects-container">
+            <div class="project">
+                <div class="description">
+                    <p class="project-title">Painter</p>
+                    <p class="project-desc">An experimental web app that procedurally generates watercolor-style art using WebGL</p>
+                </div>
+                <a href="projects/painter">
+                    <img src="projects/painter/thumbnail.png" alt="Painter">
+                </a>
+            </div>
+
+            <div class="project">
+                <div class="description">
+                    <p class="project-title">MapSeek</p>
+                    <p class="project-desc">A web game where players must find locations on a map based on their WikiPedia articles</p>
+                </div>
+                <a href="projects/mapSeek">
+                    <img src="projects/mapSeek/thumbnail.png" alt="MapSeek">
+                </a>
+            </div>
+
+            <div class="project">
+                <div class="description">
+                    <p class="project-title">White Hat</p>
+                    <p class="project-desc">A top-down stealth game in which players must sneak past enemies to the end of every level</p>
+                </div>
+                <a href="projects/whiteHat">
+                    <img src="projects/whiteHat/thumbnail.png" alt="White Hat">
+                </a>
+            </div>
+
+
+            <div class="project">
+                <div class="description">
+                    <p class="project-title">Rocketkick</p>
+                    <p class="project-desc">A local multiplayer fighting game in which players use rocket-propelled kicks to kill their opponents</p>
+                </div>
+                <a href="projects/rocketKick">
+                    <img src="projects/rocketKick/thumbnail.png" alt="Rocketkick">
+                </a>
+            </div>
+            <div class="project">
+                <div class="description">
+                    <p class="project-title">Subtractus</p>
+                    <p class="project-desc">A casual puzzle game for Android about pushing numbered tiles together on a grid to subtract them down to zero</p>
+                </div>
+                <a href="projects/subtractus">
+                    <img src="projects/subtractus/thumbnail.png" alt="Subtractus">
+                </a>
+            </div>
+            <div class="project">
+                <div class="description">
+                    <p class="project-title">Soundwaves</p>
+                    <p class="project-desc">A web app that visualizes frequency and wavelength data from songs</p>
+                </div>
+                <a href="projects/soundwaves">
+                    <img src="projects/soundwaves/thumbnail.png" alt="Soundwaves">
+                </a>
+            </div>
+            <div class="project">
+                <div class="description">
+                    <p class="project-title">Reef</p>
+                    <p class="project-desc">A steering behavior simulation of a shark chasing a school of fish around an ocean environment</p>
+                </div>
+                <a href="projects/reef">
+                    <img src="projects/reef/thumbnail.png" alt="Reef">
+                </a>
+            </div>
+            <div class="project">
+                <div class="description">
+                    <p class="project-title">Asteroids</p>
+                    <p class="project-desc">A clone of the classic arcade game Asteroids made using Processing</p>
+                </div>
+                <a href="projects/asteroids">
+                    <img src="projects/asteroids/thumbnail.png" alt="Asteroids">
+                </a>
+            </div>
+            <div class="project">
+                <div class="description">
+                    <p class="project-title">Western Quadrant</p>
+                    <p class="project-desc">An isometric shooter in which the player must survive against large numbers of enemies</p>
+                </div>
+                <a href="projects/westernQuad">
+                    <img src="projects/westernQuad/thumbnail.png" alt="Western Quadrant">
+                </a>
+            </div>
+            <div class="project empty-project"></div>
+        </div>
+    </div>
+
+    <div class="page-section" id="about">
+        <h1 class="section-header">About Me</h1>
+        <p>Hi, I'm Ryan. I'm a fourth-year Game Design and Development major at Rochester Institute of Technology. Problem solving and creating through code is my passion.</p>
+        <p>I know C#, C++, JavaScript, and HTML/CSS, and I have a great deal of experience with the Unity Game Engine. I'd love to put my skills to work for you.</p>
+        <p id="resume-download"><a href="downloads/Ryan%20Geyer%20Resume%20-%20Fall%202017.pdf" class="fade-hover">Download my resume here.</a></p>
+    </div>
+
+    <div class="page-section" id="contact">
+        <h1 class="section-header">Let's Talk</h1>
+
+        <form id="contact-form" method="POST" action="#" enctype="multipart/form-data">
+            <div id="afterSubmit"></div>
+
+            <div class="row">
+                <label>Your Name *</label>
+                <input type="text" name="name" id="name" class="input" value="">
+                <div class="spacer"></div>
+            </div>
+
+            <div class="row">
+                <label>Your Email *</label>
+                <input type="email" name="email" id="email" class="input" value="">
+                <div class="spacer"></div>
+
+            </div>
+
+            <div class="row">
+                <label>Message *</label>
+                <textarea name="message" id="message" class="input" cols="40" rows="4"></textarea>
+                <div class="spacer"></div>
+            </div>
+
+            <input id="submit" name="submit" type="submit" value="Send">
+            <div class="spacer"></div>
+        </form>
+
+    </div>
+
+    <div class="page-section" id="footer">
+        <a href="https://www.linkedin.com/in/gyanreyer/"><img src="resources/icons/linkedinIcon.png" alt="LinkedIn"></a>
+        <a href="https://github.com/Gyanreyer"><img src="resources/icons/githubIcon.png" alt="GitHub"></a>
+        <a href="https://twitter.com/gyanreyer"><img src="resources/icons/twitterIcon.png" alt="Twitter"></a>
+
+        <p>&copy; Ryan Geyer 2017</p>
+    </div>
+
+    <script src="assets/main.js"></script>
 </body>
 </html>
