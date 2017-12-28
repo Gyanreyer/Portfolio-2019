@@ -1,11 +1,11 @@
 @import url("https://fonts.googleapis.com/css?family=Raleway:400,500");
 @font-face {
   font-family: 'Bebas-Bold';
-  src: url("../resources/fonts/BebasNeue%20Bold.otf"); }
+  src: url("/assets/fonts/BebasNeue%20Bold.otf"); }
 
 @font-face {
   font-family: 'Bebas-Light';
-  src: url("../resources/fonts/BebasNeue%20Light.otf"); }
+  src: url("/assets/fonts/BebasNeue%20Light.otf"); }
 
 html, body {
   height: 100%; }

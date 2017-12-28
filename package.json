@@ -5,7 +5,8 @@
   "main": "./server/app.js",
   "scripts": {
     "watch": "gulp watch",
-    "build": "gulp build"
+    "build": "gulp build",
+    "start": "node ./server/app.js"
   },
   "repository": {
     "type": "git",
@@ -43,6 +44,7 @@
     "nodemon": "^1.14.3"
   },
   "dependencies": {
+    "aws-sdk": "^2.175.0",
     "body-parser": "^1.18.2",
     "compression": "^1.7.1",
     "express": "^4.16.2",

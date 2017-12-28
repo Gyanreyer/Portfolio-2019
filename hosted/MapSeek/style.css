@@ -1,0 +1,593 @@
+html,body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+                
+    font-family: Helvetica,sans-serif;
+    
+    background-color: #11270B;
+}    
+        
+#mapContainer{
+    position: fixed;
+                
+    box-shadow: 2px 2px 3px black;
+                
+    text-align: center;
+                
+    background-color: #3a7500;
+    
+    min-width: 120px;
+    min-height: 150px;
+    
+    max-height: 800px;
+    max-width: 640px;
+    
+    z-index: 3;
+}
+        
+#map{
+    height: 65%;
+    width: 90%;  
+        
+    margin: 4% auto 0 auto;
+    
+    position: relative;
+    overflow: hidden;
+}
+
+#moveBar{
+    height: 6%;
+    
+    margin-bottom: 1%;
+    
+    background-color: #296300;
+    box-shadow: 0 1px #333;
+    
+    cursor: pointer;
+}
+
+#moveBar:hover{
+    background-color: #306400
+}
+
+.resizeArea{
+    position: absolute;
+    z-index: 2;
+    
+    width: 3%;
+    height: 3%;
+}
+
+#topLeft{
+    top: 0;
+    left: 0;
+    
+    cursor: nwse-resize;     
+}
+
+#bottomLeft{
+    bottom: 0;
+    left: 0;
+    
+    cursor: nesw-resize;
+}
+
+#topRight{
+    top:0;
+    right:0;
+    
+    cursor: nesw-resize;
+}
+
+#bottomRight{
+    bottom:0;
+    right: 0;
+    
+    cursor: nwse-resize;
+}
+        
+#scoreBoard{
+    width: 88%;
+                
+    margin: 3% auto 2% auto;
+    padding: 1%;
+                
+    background-color: #255200;
+    color: white;
+}
+            
+#scoreBoard p{
+    margin: 1% 0 0 2%;
+    font-weight: bold;
+    text-align: left;
+}
+            
+#submitButton{
+    background-color: #444;
+    color: white;
+                
+    text-align: center;                
+                
+    font-size: 110%;
+    font-weight: bold;
+                
+    margin: 3% auto;
+    width: 65%;
+                
+    padding: 1% 0;
+                
+}
+
+#submitButton:hover{
+    background-color: #666;
+    cursor: pointer;
+}
+
+#dragHandle{
+    cursor:  nwse-resize;
+    
+    width: 7%;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+            
+#loadingScreen{
+    height: 100%;
+    width: 100%;
+                
+    background-color:#222;
+    color: white;
+                
+    position: fixed;
+            
+    top: 0;
+    left: 0;
+                
+    z-index: 50;    
+}
+            
+#loadingScreen img{
+    position: absolute;
+                   
+    width: 50%;
+                
+    left: 25%;
+    top: 35%;
+}
+            
+#loadingScreen p{
+    position: absolute;
+                
+    text-align: center;
+    font-size: 1.5em;
+                
+    width: 100%;
+                
+    top: 55%;       
+}
+         
+#mainPage{
+    width:100%;
+    min-height: 100%;
+}
+
+#pageContents{   
+    position: absolute;
+    left: 22.5%;
+    
+    line-height: 105%;
+        
+    padding-top: 1%;
+    padding-bottom: 5%;
+    
+    min-height: 90%;
+    width: 55%;
+    margin: 0 auto;
+    
+    background-color: white;
+    z-index: 0;
+    
+    box-shadow: 0 0 3px black;
+    
+}
+            
+#pageContents p{
+    margin: 2% 5%;
+    line-height: 110%;
+}
+            
+br{
+    line-height: 170%;
+}
+            
+h2,h3{
+    font-family: Century Gothic,CenturyGothic,sans-serif;
+
+    margin: 0 5%;
+}
+
+h1{
+    font-family: Century Gothic,CenturyGothic,sans-serif;
+        
+    text-align: center;
+    font-size: 5em;
+    margin: 0;
+    line-height: 90%;                
+}
+            
+.pageHead{
+    background-color: #4fa503;
+    box-shadow: 0 1px 3px black;
+                
+    width: 100%;
+    max-height: 30%;
+    top: 0;
+    margin: 0;
+    padding: 2% 0;
+    
+    position: relative;
+    z-index: 2;
+                
+}
+         
+#images{
+    margin: 0;
+}
+
+#images img{
+    width: auto;
+    margin: 1% 0 3% 5%;
+    max-height: 250px;
+    max-width: 90%;
+    
+    box-shadow: 2px 2px 3px black;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #864;
+    
+    vertical-align: top;
+}
+            
+.censored{
+    background-color: black;
+    color: black;
+}
+
+.noSelect{
+    /*This is kinda a non-standard property, need prefixes for full browser support*/
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+     -khtml-user-select: none; /* Konqueror */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+#roundEndScreen{
+    position: relative;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    
+    margin: 0;
+    
+    background-color: #444;
+    
+    z-index: 5;
+    
+    display: none;
+    
+    flex-direction: column;
+}
+
+#roundEndScreen .pageHead{
+    min-height: 20%;
+    top: 0;
+    
+    position: relative;
+    
+    z-index: 1;
+    
+    padding: 0;
+}
+
+#roundEndScreen h1{
+    margin: 2% 0;
+}
+
+#roundEndScreen #map{
+    width: 100%;
+    
+    margin: 0;
+    
+    flex: 1;
+}
+
+#guessPoints,#guessDist{
+    font-weight: bold;
+    font-size: 1.2em;
+    
+    text-align: center;
+    
+    margin: 0 0 1% 0;
+}
+
+#results{
+    background-color: #255200;
+    color: white;
+    padding: 1% 0;
+    margin: 0;
+    
+    min-height: 20%;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
+
+#continueButton{
+    background-color: #444;
+    color: white;
+                
+    text-align: center;                
+                
+    font-size: 1.2em;
+    font-weight: bold;
+                
+    margin: 1% 46%;
+                
+    padding: 1%;
+    
+    position: absolute;
+    bottom: 1%;
+    
+    z-index: 10;
+                
+}
+
+#continueButton:hover{
+    background-color: #666;
+    cursor: pointer;
+}
+
+#gameEndScreen{
+    display: none;
+    
+    position: relative;
+    top: 0;
+    left: 0;
+    
+    width: 100%;
+    height: 100%;
+    padding-bottom: 2%;
+    
+    z-index: 30;
+}
+
+#gameEndScreen #map{
+    width: 100%;
+    height: 40%;
+    
+    margin: 0;
+}
+
+#replayButton{
+    
+    background-color: #555;
+    width: 25%;
+    
+    padding: 1% 0;
+    
+    margin: 3% auto;
+    
+    text-align: center;
+    
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#replayButton:hover{
+    background-color: #666;
+    cursor: pointer;
+}
+
+#scoreResults{
+    width: 100%;
+    padding: 1% 0;
+    background-color: #2C4A04;
+    color: white;
+    
+    font-size: 1.2em;
+    
+    box-shadow: 0 1px 2px #333;
+    position: relative;
+    text-align: center;
+}
+
+#scoreResults p{
+    margin: .5%;
+}
+
+.odd{
+    background-color: #EFD198;
+    padding: 1%;
+}
+.even{
+    background-color: #FFE1A8;
+    padding:1%;
+}
+
+.score{
+    margin-left: 2%;    
+}
+
+#finalResultsDropdown{
+
+    width: 100%;
+    
+    background-color: #C9CBA3;
+    
+    box-shadow: 0px 1px 2px #222;
+    
+    font-size: 1.2em;
+}
+
+#finalScore,#highScore{
+    margin: 1% 4%;
+}
+
+#dropdownButton{ 
+    width: 100%;
+    text-align: center;
+    
+    cursor: pointer;
+    
+    background-color: #3C5A14;
+    
+    
+}
+#dropdownButton:hover{
+    background-color: #3F5C15;
+}
+
+#dropdownButton img{
+    width: 2%;
+    
+    margin: .5% 0;
+    
+    transform: rotate(180deg);
+    
+    transition: transform .5s ease-in-out;
+}
+
+#dropdownContents{
+    display: none;
+}
+
+#finalScoreBar{
+    width: 70%;
+    height: 1.5em;
+    border-radius: 5px;
+    
+    margin: 1% auto;
+    background-color: #FFF1B8;
+}
+
+#scoreBarFill{
+    width: 0;
+    height: 100%;
+    
+    border-radius: 5px;
+    background-color: #dc0;
+    
+    transition: width 1.5s ease-in-out;
+}
+
+#mobilePopupButton{
+    display: none;
+    
+    height: 5%;
+    margin-bottom: 1%;
+    
+    background-color: #296300;
+    box-shadow: 0 1px #333;
+    
+    cursor: pointer;
+}
+
+#mobilePopupButton img{
+    height: 50%;
+    margin-top: 1.5%;
+    
+    transition: transform .5s ease-in-out;
+}
+
+#mobilePopupButton:hover{
+    background-color: #306400
+}
+
+#mapContents{
+    width:100%;
+    height: 100%;
+}
+
+@media (max-width:800px){
+    #pageContents{
+        width:100%;
+        left:0;
+        padding-bottom: 10%;
+    }
+    
+    #mapContainer{
+        width:100% !important;
+        height: 100% !important;
+        bottom:0 !important;
+        left:0 !important;
+        top: auto !important;
+        right: auto !important;
+        
+        font-size: 1em !important;
+        
+        max-width: none;
+        max-height: none;
+        
+        transform: translateY(95%);
+        
+        transition: transform .5s ease-in-out;
+    }
+    
+    #moveBar,.resizeArea{
+        display: none;
+    }
+    
+    #mobilePopupButton{
+        display: block;
+    }
+    
+    #dropdownButton img{
+        width: 7%;
+        margin: 2% 0;
+    }
+    
+    #scoreResults{
+        padding-bottom: 5%;
+    }
+    #replayButton{
+        margin: 7% auto;
+    }
+    #roundEndScreen .pageHead{
+        min-height: 15%;
+    }
+    #roundEndScreen h1{
+        margin: 5% 0;
+    }
+    
+    #loadingScreen{
+        font-size: .9em;
+    }
+    #loadingScreen img{
+        width: 75%;
+        left:12.5%;
+    }
+    
+    
+    *{
+        font-size: .97em;
+    }
+    h1{
+        font-size:4em;
+    }
+    #guessPoints, #guessDist{
+        font-size: 1.05em;
+    }
+    #continueButton,#replayButton{
+        font-size: 1.05em;
+        padding: 2%;
+    }
+    
+    
+}

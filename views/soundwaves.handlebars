@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Ryan Geyer - Web Audio Visualizer</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    
+	<style>
+        body {
+            background: black;
+            font-family: 'Roboto',sans-serif;
+            margin:0;
+
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            
+            color: white;
+            
+            font-size: 0.9em;
+        }
+
+        canvas {
+
+            margin: 0;
+            width: 100%;
+            height:100%;
+        }
+
+        section{
+            display: inline-block;
+            margin: 0 1%;
+            
+            min-width: 15%;
+            
+            vertical-align: top;
+        }
+        
+        
+        h2{
+            margin: 1% 0 0.5% 0;
+            1.6em;
+        }
+        
+        
+        /*Controls*/
+        #controls{
+            position: absolute;
+
+            bottom: 0;
+            margin: 0;
+
+            width: 100%;
+            transform: translateY(100%);
+            transition: transform 0.4s ease-in-out;
+
+            padding-bottom: 2%;
+            
+            background: #444;
+        }
+    
+        #controlsPopup{
+            position: absolute;
+            
+            bottom: 0;
+            
+            left: 50%;        
+            transform: translateX(-100%);
+            
+            transition: transform 0.4s ease-in-out;
+            
+            margin: 1%;
+            width: 2%;
+            min-width: 30px;
+            
+            cursor: pointer;
+            
+        }
+        
+        #controlsPopup img{
+            width: 100%;
+        }
+         
+        /*Custom audio player styles*/
+        #player{
+            height: 70px;
+            display: block;
+            width: 66%;
+            margin: 0 auto;
+        }        
+        
+        #pButton{
+            height: 50px;
+            width: 50px;
+            background-size: 50%;
+            background-position: center;
+            margin-right: 5px;
+            
+            float: left;
+            
+        }
+        
+        #timeline{
+            width: 70%;
+            height: 20px;
+            background: #995555;
+            margin-top: 15px;
+            float: left;
+            border-radius: 15px;
+            
+            position: relative;
+        }
+        
+        #songProgress{
+            width: 0;
+            height: 20px;
+            border-radius: 15px;
+            float: left;
+            
+            background: #773333;
+            
+            position: absolute;
+        }
+        
+        #playhead{
+            height:20px;
+            width:20px;
+            border-radius: 50%;
+            background: white;
+            
+            float: left;
+            position: absolute;
+            left:0;
+            
+            margin-left: -10px;
+
+        }
+        
+        #volumeSlider{
+            margin-left: 5px;
+            margin-top: 15px;
+            
+            width: 12%;
+        }
+        
+        #volumeIcon{
+            margin-left: 5px;
+            width: 50px;
+            height: 50px;
+            background-size: 50%;
+            background-position: center;
+            
+            float: left;
+        }
+        
+        .on{background: url('/assets/Soundwaves/volumeOn.png') no-repeat;}
+        .off{background: url('/assets/Soundwaves/volumeOff.png') no-repeat;}
+        
+        .play{background: url('/assets/Soundwaves/play.png') no-repeat;}
+        .pause{background: url('/assets/Soundwaves/pause.png') no-repeat;}
+    
+        
+	</style>
+	<script>
+	// An IIFE ("Iffy") - see the notes in mycourses
+	(function(){
+		"use strict";
+		
+		var NUM_SAMPLES = 256;        
+        var SOUND_1 = '/assets/Soundwaves/Shakestopper.mp3';
+		var SOUND_2 = '/assets/Soundwaves/RollerMobster.mp3';
+		var SOUND_3 = '/assets/Soundwaves/Destination.mp3';	
+        var SOUND_4 = '/assets/Soundwaves/ClearestBlue.mp3';
+        var SOUND_5 = '/assets/Soundwaves/OldYellowBricks.mp3';
+		var audioElement;
+		var analyserNode;
+		var canvas,ctx;
+        
+        var delayNode;//Delay node for reverb effect
+        var bassBoost;//Biquad Filter Node for bass boost effect
+        
+        var delayAmount;
+        
+        var prevData = null;//Array holds data from previous frame to compare for spikes    
+        var beatTolerance = 3;//Tolerance for data spikes to visualize as beats - hgiher tolerance = more beats
+        var startRadius = 20;//Initial radius that circles are spawned with
+        
+        var showFrequency = true;//If true display frequency data, otherwise display waveform
+        
+        var timeline, progressBar, playhead, songProgress;//variables for elements of custom audio controller
+        var timelineClicked = false;//Whether timeline has been clicked for scrubbing through song
+        var lastVolume = 0.2;//Volume stored to return to if user clicks mute button and then unmutes
+        var tempPaused = false;
+        
+        var brightness = 0.5;
+        
+        var invert, tintRed, noise, lines;//Post fx, can be turned on/off with checkboxes
+        invert = tintRed = noise = lines = false;        
+        
+        var circlePos = {x:0,y:0};//Pos to spawn circle at each frame
+        var circlePosVel = {x:0,y:0};//Velocity for moving circlepos each frame    
+        
+        var mousePos = {x:0,y:0};//Position of mouse of canvas, circles will spawn on this in "Mouse Follow" mode
+        
+        var spawnMode = 0;//Mode for visualizing data, can be 0-3       
+        //Spawn Mode 0: Static, circles spawn in center of screen with beats
+        //Spawn Mode 1: Random Move, circles spawn in a slightly randomly varied location with each beat, causing a kinda fun tunnel effect
+        //Spawn Mode 2: Mouse Follow, circles spawn on the mouse's position
+        //Spawn Mode 3: Line, visualizes data with a line and spawns circles at the positions of peaks in the data
+        //Spawn Mode 4: Curve, visualizes data with bezier curves with height to match intensity of freq/waveform
+        
+        var deltaTime, lastFrameTime = 0;//Variables for calculating delta time for frame independent movement
+        
+        var circlesArray = [];//Array holds all active instances of visualizerCircle
+        
+        //Object for circle spawnedi in visualization
+        var visualizerCircle = function(x,y,initRadius,hue){
+            this.x = x;//X and Y pos to draw center of circle
+            this.y = y;
+            
+            this.radius = initRadius;//Initial radius to spawn with
+            this.hue = hue;//Color of circle
+            
+            //Depending on spawn mode, set the radius and line width of circle for when it despawns
+            if(spawnMode < 3){
+                this.endRadius = .25*canvas.width;
+                this.endWidth = 30;
+            }
+            else{
+                this.endRadius = initRadius * 5;
+                this.endWidth = 10;
+            }
+                       
+            this.delete = false;//Whether circle should be deleted, false until radius reaches endRadius
+            this.speed = 200;//Initial speed to increase radius by
+            
+            //Function to update/draw circle
+            this.draw = function(dt){    
+                //Accelarate speed of radius and increase radius
+                this.speed += 100*dt;
+                this.radius += this.speed*dt;
+                   
+                var percentToEnd = (this.radius/this.endRadius);//Percent of way to the end radius
+                
+                //Set stroke color using hue/saturation/lightness, set alpha and lightness based on percent to end so circle fades in/out
+                ctx.strokeStyle = "hsla("+this.hue+",100%,"+(20+percentToEnd*50)+"%,"+(1-percentToEnd)+")";
+                ctx.lineWidth = (percentToEnd*this.endWidth);//Line width will expand to 40
+                    
+                //Draw circle
+                ctx.beginPath();
+                ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+                ctx.stroke();
+                ctx.closePath();
+                
+                //If past end radius, set this circle to be deleted
+                if(percentToEnd >= 1){
+                    this.delete = true;
+                }
+            }
+        };
+        
+        
+        
+        
+		function init(){
+			// set up canvas stuff
+			canvas = document.querySelector('canvas');
+			ctx = canvas.getContext("2d");
+            
+            canvas.width = window.innerWidth;//Canvas fills screen
+            canvas.height = window.innerHeight;
+            
+            //Get elements for audio controls
+            timeline = document.querySelector("#timeline");
+            progressBar = document.querySelector("#songProgress");
+            playhead = document.querySelector("#playhead");
+            
+			// get reference to <audio> element on page
+			audioElement = document.querySelector('audio');
+			
+			// call our helper function and get an analyser node
+			analyserNode = createWebAudioContextWithAnalyserNode(audioElement);
+			//delayNode = createWebAudioContextWithAnalyserNode(audioElement);
+            
+			// Hook up UI elements with events
+			setupUI();
+            
+            
+			// load and play default sound into audio element
+			startStream(audioElement,SOUND_1);
+            
+			// start animation loop
+			update();      
+		}
+		
+		function update() {
+			// this schedules a call to the update() method in 1/60 seconds
+			requestAnimationFrame(update);
+            
+            
+            //Calculate delta time
+			var currentTime = performance.now();//Milliseconds since site was loaded
+            deltaTime = (currentTime-lastFrameTime)/1000;
+            lastFrameTime = currentTime;
+             
+			// create a new array of 8-bit integers (0-255)
+			var data = new Uint8Array(NUM_SAMPLES/2);	      
+            		
+            
+            //Get frequency data or waveform data depending on what user selected
+            if(showFrequency)
+                analyserNode.getByteFrequencyData(data);
+            else
+                analyserNode.getByteTimeDomainData(data);
+            
+            //If prevData doesn't exist yet, store current frame's data
+            if(!prevData)
+                prevData = data;
+            
+            
+			// DRAW!
+			ctx.clearRect(0,0,canvas.width,canvas.height);  
+
+            //Draw line representing data if in line mode
+            if(spawnMode == 3){
+                ctx.save();
+
+                var grad = ctx.createLinearGradient(0,0,canvas.width,0);
+                
+                for(var i = 0; i < 360; i++){
+                    grad.addColorStop(i/360,"hsl("+i+",100%,50%)");
+                    
+                }
+                
+                ctx.beginPath();
+                ctx.lineWidth = "2";
+                ctx.strokeStyle = grad;
+                ctx.lineCap = "round";
+                
+                var yModifier = showFrequency?0:128;//Subtract 128 from waveform since its base resting val is 128
+                
+                ctx.moveTo(0,(canvas.height/2)-(data[0]-yModifier));//Move to left edge for first value
+
+                var spacing = canvas.width/(data.length-1);//X width between each point on line
+
+                //Draw lines for each element in data
+                for(var i = 1; i < data.length; i++){
+                    ctx.lineTo((i*spacing),(canvas.height/2)-(data[i]-yModifier));
+                }                
+                
+
+                ctx.stroke();
+                ctx.closePath();
+
+                ctx.restore();        
+            }
+
+            //Analyze data for any beats, will add circle to array if one detected
+            getBeats(data);
+            
+            //Draw all circles in array, draws back to front so oldest/largest circles are on top
+            for(var i = circlesArray.length-1; i >= 0; i--){          
+                circlesArray[i].draw(deltaTime);
+                
+                //If a circle needs to be deleted, remove it from the array
+                if(circlesArray[i].delete){
+                    circlesArray.splice(i,1);               
+                }
+            } 
+
+            //Apply post FX
+            manipulatePixels();
+			 
+		} 
+        
+        //Depending on what spawn mode we're in, update circlePos accordingly
+        function updateCirclePos(){
+            //Static mode, pos is center of screen
+            if(spawnMode == 0){
+                circlePos.x = canvas.width/2;
+                circlePos.y = canvas.height/2;
+            }        
+            //Random move, randomly vary velocity and move pos by that amt
+            else if(spawnMode == 1){
+                circlePos.x += circlePosVel.x;
+                circlePos.y += circlePosVel.y;
+
+                circlePosVel.x += 1-Math.random()*2;
+                circlePosVel.y += 1-Math.random()*2;
+
+                if((circlePos.x > canvas.width-100 && circlePosVel.x > 0) || (circlePos.x < 100 && circlePosVel.x < 0)){
+                    circlePosVel.x *= -1;
+                }
+                if((circlePos.y > canvas.height-100 && circlePosVel.y > 0) || (circlePos.y < 100 && circlePosVel.y < 0)){
+                    circlePosVel.y *= -1;
+                }                    
+            }
+            //Mouse follow, set circle pos to mouse pos on canvas
+            else if(spawnMode == 2){
+                circlePos.x = mousePos.x;
+                circlePos.y = mousePos.y;
+            }
+            
+        }
+        
+        //Detect beats in audio from data
+        function getBeats(data){
+            
+            var highestDiffInd = 0;
+            var highestDiffAmt = 0;
+
+            var avgVal = 0;
+            
+            //Run through data array, store index with highest increase in freq
+            for(var i = 0; i < data.length; i++){
+                if(data[i]-prevData[i] > highestDiffAmt){
+                    highestDiffAmt = data[i]-prevData[i];
+                    highestDiffInd = i;
+                }
+                
+                //Draw a bezier curve for each non-zero freq
+                if(spawnMode == 4){            
+                    var ctrlY;
+                    if(showFrequency && data[i] > 0)
+                        ctrlY = (.5*canvas.height)-(2*data[i]);
+                    else if(!showFrequency && data[i] != 128)
+                        ctrlY = (.5*canvas.height)-(20*(data[i]-128));
+                    else
+                        continue;
+                    
+                    ctx.beginPath();
+                    ctx.lineWidth="2";
+                    ctx.strokeStyle = "hsl("+360*(i/data.length)+",100%,50%)";
+                    ctx.moveTo(canvas.width*.25,canvas.height/2);                   
+                    ctx.bezierCurveTo(canvas.width*.4,ctrlY,canvas.width*.6,ctrlY, canvas.width*.75,canvas.height*.5);
+                    ctx.stroke();
+                    ctx.closePath();
+                    
+                }
+                
+                //If using waveform, get average of data for beat detection
+                if(!showFrequency){
+                    avgVal += data[i]-128;
+                }
+            } 
+            
+            //If spawn mode 3, place circle pos at peak of highest change
+            if(spawnMode == 3){
+                var yMod = showFrequency?0:128;
+                
+                circlePos.x = highestDiffInd*canvas.width/(data.length-1);
+                circlePos.y = (canvas.height/2)-data[highestDiffInd]+yMod;
+            }
+
+            if(spawnMode != 4){
+            
+                //If using frequency data and highest change is greater than a certain fraction of the original value, count it as a significant beat - beatTolerance can be adjusted to make it more/less sensitive
+                if(showFrequency && highestDiffAmt > (prevData[highestDiffInd]/beatTolerance)){                                                
+                    updateCirclePos();//Update circle position based on mode
+
+                        //Add visualizerCircle to circles array
+                    circlesArray.push(new visualizerCircle(circlePos.x,circlePos.y,parseInt(startRadius),360*(highestDiffInd/data.length)));//Hue is based on frequency
+
+                }
+                    //If the average waveform data is high enough, count as a beat
+                else if(avgVal/data.length > 5/beatTolerance){ 
+
+                    updateCirclePos();
+                    circlesArray.push(new visualizerCircle(circlePos.x,circlePos.y,parseInt(startRadius),360*(highestDiffInd/data.length)));                
+                }  
+            }
+            
+            
+            prevData = data;//Store this frame's data in prevData for next frame
+        }
+            
+        
+        
+        //Post effects on canvas
+        function manipulatePixels(){
+            var imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+            
+            var data = imageData.data;
+            var width = imageData.width;
+        
+            var brightnessMod = 255*(brightness-0.5);//Modify brightness of all pixels based on this amount
+            
+            for(var i = 0; i < data.length; i+=4){
+                if(tintRed){
+                    data[i]+=100;
+                }
+                
+                if(invert){
+                    var red = data[i], green = data[i+1], blue = data[i+2];
+                    data[i]=255-red;
+                    data[i+1]=255-green;
+                    data[i+2]=255-blue;
+                }
+                
+                if(noise && Math.random()<.05){
+                    data[i] = data[i+1]=data[i+2]=128;//Set pixel to gray, only does this for ~5% of pixels
+                    
+                    data[i+3]=255;
+                }
+                
+                if(lines){
+                    var row = Math.floor(i/4/width);
+                    
+                    if(row%50==0){
+                        data[i] = data[i+1] = data[i+2] = data[i+3] = 255;
+                        
+                        data[i+(width*4)] = data[i+1+(width*4)] = data[i+2+(width*4)] = data[i+3+(width*4)] = 255;
+                    }
+                }
+                
+                //Increase all pixels by brightness mod
+                for(var j = 0; j < 4; j++){
+                    data[i+j]+=brightnessMod;
+                }
+                
+            }
+            
+            ctx.putImageData(imageData,0,0);
+            
+        }
+        
+        //Hook up event triggers for UI
+        function setupUI(){
+            //Start new track when change track selection
+			document.querySelector("#trackSelect").onchange = function(e){
+				startStream(audioElement,e.target.value);
+			};
+            
+            //Update circle spawning mode
+            document.querySelector("#modeSelect").onchange = function(e){
+                spawnMode = parseInt(e.target.value);
+                
+                circlePos.x = canvas.width/2;
+                circlePos.y = canvas.height/2;
+            };
+            
+            //Initial radius for circles
+            document.querySelector("#radiusSlider").oninput = function(e){
+                startRadius = e.target.value;
+                document.querySelector("#radVal").innerHTML = startRadius;
+            };
+            
+            //Tolerance for beat detection
+            document.querySelector("#toleranceSlider").oninput = function(e){
+                beatTolerance = e.target.value;
+                document.querySelector("#tolVal").innerHTML = beatTolerance;  
+            };
+            
+            //Post effect checkboxes
+            document.querySelector("#redTintCheck").onchange = function(e){tintRed = e.target.checked;};
+            document.querySelector("#invertCheck").onchange = function(e){invert = e.target.checked;};
+            document.querySelector("#noiseCheck").onchange = function(e){noise = e.target.checked;};
+            
+            //Slider for brightness
+            document.querySelector("#brightnessSlider").oninput = function(e){
+                brightness = e.target.value;
+                
+                document.querySelector("#brightVal").innerHTML = brightness;
+            };
+            
+            //Slider for reverb
+            document.querySelector("#reverbSlider").oninput = function(e){
+                delayAmount = e.target.value;
+                
+                delayNode.delayTime.value = delayAmount;
+                
+                document.querySelector("#revVal").innerHTML = delayAmount + " s";
+            };
+            
+            //Slider for bass boost
+            document.querySelector("#bassSlider").oninput = function(e){
+                bassBoost.gain.value = e.target.value;
+                
+                document.querySelector("#bassVal").innerHTML = e.target.value + " dB";
+            };
+            
+            //Rescale canvas when window resized
+            window.onresize = function(){
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            };
+            
+            //Updates mouse pos each frame
+            canvas.onmousemove = function(e){                
+                mousePos.x = e.pageX-e.target.offsetLeft;
+                mousePos.y = e.pageY-e.target.offsetTop;
+            };
+            
+            //Start scrubbing through audio player timeline
+            timeline.onmousedown = function(e){
+                songProgress = (e.pageX - timeline.offsetLeft)/timeline.offsetWidth;//Determine progress in song by position of click on timeline
+                              
+                progressBar.style.width = playhead.style.left = (100*songProgress) + "%";//Update progress visually
+                
+                audioElement.currentTime = audioElement.duration * songProgress;//Update time in audioElement
+                
+                timelineClicked = true;//Timeline is being clicked, can now drag on timeline
+                
+                //Pause audio while scrubbing
+                if(!audioElement.paused){
+                    tempPaused = true;
+                    audioElement.pause();
+                }
+            }
+            
+            //If mouse still down and moving over timeline, continue updating position in song
+            timeline.onmousemove = function(e){    
+
+                if(timelineClicked){
+                    songProgress = (e.pageX - timeline.offsetLeft)/timeline.offsetWidth;
+
+                    progressBar.style.width = playhead.style.left = (100*songProgress) + "%";
+                }
+            }
+            
+            //If mouse released, finalize song position and resume playing at that point
+            timeline.onmouseup = function(){             
+                if(timelineClicked){
+                    timelineClicked = false;
+                    audioElement.currentTime = audioElement.duration * songProgress;
+
+                    if(audioElement.paused && tempPaused){
+                        tempPaused =false;
+                        audioElement.play();             
+                    }
+                }
+            }
+
+            
+            //Play/pause audio when you click play button
+            document.querySelector("#pButton").onclick = function(){playPauseAudio();};
+            
+            //Popup arrow to bring up controls
+            document.querySelector("#controlsPopup").onclick = function(){popupControls();};
+
+            //Volume slider updates audio element's volume
+            document.querySelector("#volumeSlider").oninput = function(e){
+                audioElement.volume = e.target.value;
+                
+                var volIcon = document.querySelector("#volumeIcon");
+                
+                //Update volume icon depending on whether sound is on or off
+                if(audioElement.volume == 0){
+                    volIcon.className = "off";
+                }else{
+                    volIcon.className = "on";
+                }         
+            };
+            
+            //Clicking volume icon mutes/unmutes audio
+            document.querySelector("#volumeIcon").onclick = function(e){
+                var volIcon = document.querySelector("#volumeIcon");
+                
+                //If volume is muted, return volume back to last one stored
+                if(audioElement.volume==0 && lastVolume > 0){
+                    audioElement.volume = lastVolume;
+                    volIcon.className="on";
+                    document.querySelector("#volumeSlider").value = lastVolume;                    
+                }
+                //Otherwise mute volume
+                else{
+                    lastVolume = audioElement.volume;
+                    audioElement.volume = 0;
+                    volIcon.className="off";
+                    
+                    document.querySelector("#volumeSlider").value = 0;
+                    document.querySelector("#volumeIcon").className = "off";
+                }
+            };
+            
+            //Radio buttons determine whether to use freq or waveform data
+            document.querySelector("#freqRadioButton").onclick = function(){showFrequency = true;};
+            document.querySelector("#waveRadioButton").onclick = function(){showFrequency = false;};    
+		}
+        
+        //Plays/pauses audio
+        function playPauseAudio(){
+            var playButton = document.querySelector("#pButton");
+            
+            if(audioElement.paused){
+                audioElement.play();
+                
+                playButton.className = "pause";//Set play button's class name to pause so it has a pause icon
+            }
+            else{
+                audioElement.pause();
+                
+                playButton.className = "play";//Set play button's class name to play so it has a play icon
+            }     
+        }
+        
+        //Update controls timeline based on audio element's time
+        function timeUpdate(){
+            songProgress = audioElement.currentTime/audioElement.duration;
+            
+            progressBar.style.width = playhead.style.left = (100*songProgress) + "%";
+        }
+        
+        
+        //Pop up control bar when arrow on bottom is clicked
+        function popupControls(){
+            var controls = document.querySelector("#controls");
+            var controlsArrow = document.querySelector("#controlsPopup");
+            
+            //Translate controls and arrow up, css animation will make it smooth
+            controls.style.transform = "translateY(0)";
+            controlsArrow.style.transform = "translate(-100%,-"+controls.clientHeight+"px) rotate(180deg)";
+            
+            controlsArrow.onclick = function(){collapseControls();};//Set onclick of arrow to collapse controls
+        }
+        
+        //Collapse controls down when arrow is clicked a second time
+        function collapseControls(){  
+            //Translate down
+            document.querySelector("#controls").style.transform = "translateY(100%)";
+            document.querySelector("#controlsPopup").style.transform = "translateX(-100%)";
+                
+            document.querySelector("#controlsPopup").onclick = function(){popupControls();};//Set onclick of arrow back to pop up controls    
+        }
+		
+        //Start stream with audio file from given path 
+		function startStream(audioElement,path){
+			audioElement.src = path;		
+			audioElement.volume = lastVolume;
+            
+            //Set event so that when audio element updates its time, will update position on controls timeline
+            audioElement.ontimeupdate = function(){timeUpdate()};
+            
+            //Reset progress on controls to start
+            songProgress = 0;
+            progressBar.style.width = playhead.style.left = 0;
+            
+            playPauseAudio();
+        }
+		
+		 // FULL SCREEN MODE
+		function requestFullscreen(element) {
+			if (element.requestFullscreen) {
+			  element.requestFullscreen();
+			} else if (element.mozRequestFullscreen) {
+			  element.mozRequestFullscreen();
+			} else if (element.mozRequestFullScreen) { // camel-cased 'S' was changed to 's' in spec
+			  element.mozRequestFullScreen();
+			} else if (element.webkitRequestFullscreen) {
+			  element.webkitRequestFullscreen();
+			}
+			// .. and do nothing if the method is not supported
+		};
+        
+        function createWebAudioContextWithAnalyserNode(audioElement) {
+			var audioCtx, analyserNode, sourceNode;
+			// create new AudioContext
+			// The || is because WebAudio has not been standardized across browsers yet
+			// http://webaudio.github.io/web-audio-api/#the-audiocontext-interface
+			audioCtx = new (window.AudioContext || window.webkitAudioContext);
+			
+			// create an analyser node
+			analyserNode = audioCtx.createAnalyser();
+			//create delay node
+            delayNode = audioCtx.createDelay();
+            //Create bass boost node
+            bassBoost = audioCtx.createBiquadFilter();
+           
+            bassBoost.type = "lowshelf";//Lowshelf boosts frequencies below a given freq
+            bassBoost.frequency.value = 250;//Bass generally considered frequencies < 250hz
+            bassBoost.gain.value = 0;//Amount by which bass will be boosted in dB
+            
+			/*
+			We will request NUM_SAMPLES number of samples or "bins" spaced equally 
+			across the sound spectrum.
+			
+			If NUM_SAMPLES (fftSize) is 256, then the first bin is 0 Hz, the second is 172 Hz, 
+			the third is 344Hz. Each bin contains a number between 0-255 representing 
+			the amplitude of that frequency.
+			*/ 
+            
+			// fft stands for Fast Fourier Transform
+			analyserNode.fftSize = NUM_SAMPLES;
+			
+			// this is where we hook up the <audio> element to the analyserNode
+			sourceNode = audioCtx.createMediaElementSource(audioElement); 
+			/*sourceNode.connect(analyserNode);
+			
+			// here we connect to the destination i.e. speakers
+			analyserNode.connect(audioCtx.destination);*/
+            
+            sourceNode.connect(audioCtx.destination);
+            
+            sourceNode.connect(delayNode);
+            delayNode.connect(bassBoost);
+            bassBoost.connect(analyserNode);
+            analyserNode.connect(audioCtx.destination);
+            
+			return analyserNode;
+		}
+		
+		
+		window.addEventListener("load",init);
+	}());
+		
+	</script>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+    <div id="controlsPopup"><img src="/assets/Soundwaves/menuArrow.png" alt="Open controls menus" draggable="false"></div>
+    
+    <audio loop></audio>
+	<div id="controls">
+        <!--Custom audio player controls based off of tutorial here: http://www.alexkatz.me/html5-audio/building-a-custom-html5-audio-player-with-javascript-->
+        <div id="player">
+            <div id="pButton" class="pause"></div>
+            <div id="timeline">
+                <div id="songProgress"></div>
+                <div id="playhead"></div>
+            </div>
+            <div id="volumeIcon" class="on"></div>
+            <input id="volumeSlider" type="range" min="0" max="1" step=".05" value="0.2">
+        </div>
+        
+        <section><h2>Track:</h2>
+			<select id="trackSelect" >              
+                <option value="/assets/Soundwaves/Shakestopper.mp3">Shakestopper</option>
+                <option value="/assets/Soundwaves/RollerMobster.mp3">Roller Mobster</option>               
+				<option value="/assets/Soundwaves/Destination.mp3">Destination</option>				
+				<option value="/assets/Soundwaves/ClearestBlue.mp3">Clearest Blue</option>		
+                <option value="/assets/Soundwaves/OldYellowBricks.mp3">Old Yellow Bricks</option>
+				
+			</select>
+		</section>
+        
+        <section><h2>Visualizer Mode:</h2>
+            <select id="modeSelect">
+                <option value="0">Static Circle</option>
+                <option value="1">Random Move</option>
+                <option value="2">Mouse Follow</option>
+                <option value="3">Line</option>
+                <option value="4">Curve</option>
+            </select>
+        </section>
+        
+        
+        <section><h2>Audio Data Type:</h2>
+            <form>        
+                <input type="radio" name="data" value="frequency" class="dataRadioButton" checked id="freqRadioButton"><label for="freqRadioButton">Frequency</label><br/>
+                <input type="radio" name="data" value="waveform" class="dataRadioButton" id="waveRadioButton"><label for="waveRadioButton">Waveform</label>        
+            </form>
+        </section>
+        
+        <section><h2>Audio Effects:</h2>
+            <label>Reverb:<input type="range" id="reverbSlider" min="0" max="1" step="0.05" value="0"></label>
+            <label id="revVal">0 s</label><br/>
+            
+            <label>Bass Boost:<input type="range" id="bassSlider" min="0" max="50" step="5" value="0"></label>
+            <label id="bassVal">0 dB</label>
+        
+        
+        </section>
+        
+        <section><h2>Visualizer Modifiers:</h2>
+            <label>Start radius:
+                <input id="radiusSlider" type="range" min = "0" max="100" step="5" value="20"> 
+                <label id="radVal">20</label>
+            </label><br/>
+
+            <label>Beat tolerance:
+                <input id="toleranceSlider" type="range" min = "0.5" max="5" step="0.5" value="3"> 
+                <label id="tolVal">3</label>
+            </label><br/>
+        </section>
+        
+        <section><h2>Post-Effects:</h2>
+            <label>Red Tint:<input type="checkbox" id="redTintCheck"></label><br/>
+            <label>Invert Colors:<input type="checkbox" id="invertCheck"></label>
+            <label>Noise:<input type="checkbox" id="noiseCheck"></label><br/>
+            <label>Brightness:
+                <input type="range" id="brightnessSlider" min="0" max="1" step="0.05" value="0.5">
+                <label id="brightVal">0.5</label>
+            </label>
+        </section>
+ 
+	</div>
+    
+</body>
+</html>
