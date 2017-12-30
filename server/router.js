@@ -1,4 +1,4 @@
-const projectPage = require('./projects');
+const controller = require('./controller');
 const contact = require('./contact');
 
 const router = (app) => {
@@ -13,10 +13,8 @@ const router = (app) => {
     });
 
     app.post('/contact', contact);
-    app.get('/project/:name', projectPage);
-    app.get('/', (req, res) => {
-      res.render('home');
-    });
+    app.get('/project/:name', controller.renderProjectPage);
+    app.get('/', controller.renderHomePage);
     app.get('/*', (req, res) => {
       res.render('notFound');
     });

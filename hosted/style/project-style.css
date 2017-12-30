@@ -20,6 +20,7 @@ p {
   font-size: 1.1em; }
 
 body {
+  height: auto !important;
   padding-bottom: 5%; }
 
 #main {
