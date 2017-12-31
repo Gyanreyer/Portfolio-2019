@@ -77,7 +77,7 @@ const validateEmpty = (string) => {
 
 //Validate whether string is a valid email
 const validateEmail = (email) => {
-    return /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email);
+    return /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email);
 };
 
 //Show message to verify if message was successfully sent

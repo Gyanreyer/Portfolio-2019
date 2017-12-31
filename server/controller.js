@@ -154,7 +154,7 @@ const renderProjectPage = (req, res) => {
 };
 
 const renderHomePage = (req, res) => {
-  const projectList = Object.values(projects);
+  const projectList = Object.keys(projects).map(key => projects[key]);
 
   res.render('home', { projects: projectList });
 };
