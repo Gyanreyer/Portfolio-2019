@@ -266,7 +266,7 @@ label{
     display: inline;
     font-size: 1.5em;
     
-    transition: color .25s ease-in-out;
+    transition: color .3s ease-in-out;
 }
 
 input{
@@ -320,18 +320,23 @@ input{
 #afterSubmit{
     background-color: #5A8;
     
-    padding: 2%;
-    margin-bottom: 3%;
-    width: 96%;
+    width: 100%;
+    margin-bottom: 0;
     
     clear: both;
     
-    display: none;
-    
     font-size: 1.2em;
+
+    transition: max-height .3s ease-out, margin-bottom .3s ease-out;
+    max-height:0;
+    overflow:hidden;
+
+    div{
+        padding: .75em;
+    }
 }
 
-.row{
+.formSection{
     display: block;
     clear: both;
 }

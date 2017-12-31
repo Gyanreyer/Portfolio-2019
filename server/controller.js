@@ -1,6 +1,6 @@
 const projects = {
   spookemup: {
-    name: `Spook 'em Up`,
+    name: 'Spook \'em Up',
     pathName: 'spookemup',
     date: 'Fall 2017',
     shortDesc: 'A simple first-person shooter game built with C++ and DirectX11',
@@ -9,7 +9,7 @@ const projects = {
         'in which I served as the primary gameplay programmer. It was made over the course of about 2 ' +
         'months as a class project for Foundations of Game Graphics Programming, Fall 2017.',
     technologies: 'C++, DirectX11',
-    links: 'Check it out on GitHub <a href="https://github.com/Gyanreyer/GGP-Game-Engine" class="fade-hover">here</a>.'
+    links: 'Check it out on GitHub <a href="https://github.com/Gyanreyer/GGP-Game-Engine" class="fade-hover">here</a>.',
   },
   tickr: {
     name: 'Tickr',
@@ -21,7 +21,7 @@ const projects = {
         'of a month for Rich Media Web App Development II, Fall 2017.',
     technologies: 'Node.js, <a href="https://www.alphavantage.co/">Alpha Vantage API</a>, JavaScript, HTML, CSS',
     links: 'Try it out <a href="https://get-tickr.herokuapp.com/">here</a> ' +
-        'or check out the source code on GitHub <a href="https://github.com/Gyanreyer/Tickr" class="fade-hover">here</a>.'
+        'or check out the source code on GitHub <a href="https://github.com/Gyanreyer/Tickr" class="fade-hover">here</a>.',
   },
   painter: {
     name: 'Painter',
@@ -63,7 +63,7 @@ const projects = {
             'class project for Game Design and Development II, Fall 2016.',
     technologies: 'C#, Unity Engine',
     links: 'Check it out on GitHub <a href="https://github.com/Gyanreyer/WhiteHat" class="fade-hover">here</a>.',
-    },
+  },
   rocketkick: {
     name: 'RocketKick',
     pathName: 'rocketkick',
@@ -139,7 +139,7 @@ const renderProjectPage = (req, res) => {
   // If no name provided, return not found
   if (!req.params.name) {
     return res.status(404).render('notFound');
-  }  
+  }
 
   // Parse received name into lowercase string
   const parsedName = `${req.params.name}`.toLowerCase();
@@ -154,12 +154,12 @@ const renderProjectPage = (req, res) => {
 };
 
 const renderHomePage = (req, res) => {
-    const projectList = Object.values(projects);
+  const projectList = Object.values(projects);
 
-    res.render('home', {projects: projectList});
+  res.render('home', { projects: projectList });
 };
 
 module.exports = {
-    renderProjectPage,
-    renderHomePage
+  renderProjectPage,
+  renderHomePage,
 };

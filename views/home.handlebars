@@ -54,24 +54,24 @@
         <h1 class="section-header">Let's Talk</h1>
 
         <form id="contact-form" method="POST" action="#" enctype="multipart/form-data">
-            <div id="afterSubmit"></div>
+            <div id="afterSubmit"><div></div></div>
 
-            <div class="row">
+            <div class="formSection" id="nameSection">
                 <label>Your Name *</label>
-                <input type="text" name="name" id="name" class="input" value="">
+                <input type="text" name="name" id="name" class="input" value="" valid="false">
                 <div class="spacer"></div>
             </div>
 
-            <div class="row">
+            <div class="formSection" id="emailSection">
                 <label>Your Email *</label>
-                <input type="email" name="email" id="email" class="input" value="">
+                <input type="email" name="email" id="email" class="input" value="" valid="false">
                 <div class="spacer"></div>
 
             </div>
 
-            <div class="row">
+            <div class="formSection" id="messageSection">
                 <label>Message *</label>
-                <textarea name="message" id="message" class="input" cols="40" rows="4"></textarea>
+                <textarea name="message" id="message" class="input" cols="40" rows="4" valid="false"></textarea>
                 <div class="spacer"></div>
             </div>
 
