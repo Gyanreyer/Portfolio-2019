@@ -1,0 +1,138 @@
+$fontWeightLight: 300;
+$fontWeightSemiBold: 500;
+$fontWeightBold: 700;
+
+$baseGrayFontColor: #222;
+$baseGrayFontColorHover: #666;
+
+$breakpoint-medium: "only screen and (max-width : 900px)";
+$breakpoint-mobile: "only screen and (max-width : 600px)";
+
+@font-face {
+  font-family: LeagueSpartan;
+  src: url('./fonts/LeagueSpartan-Bold.otf') format('opentype');
+  font-weight: $fontWeightBold;
+}
+
+@font-face {
+  font-family: Aileron;
+  src: url('./fonts/Aileron-Light.otf') format('opentype');
+  font-weight: $fontWeightLight;
+}
+
+@font-face {
+  font-family: Aileron;
+  src: url('./fonts/Aileron-SemiBold.otf') format('opentype');
+  font-weight: $fontWeightSemiBold;
+}
+
+@font-face {
+  font-family: Aileron;
+  src: url('./fonts/Aileron-Bold.otf') format('opentype');
+  font-weight: $fontWeightBold;
+}
+
+body, html {
+  height: 100%;
+  min-height: 100vh;
+  // Default site-wide font is Aileron-Light
+  font-family: Aileron;
+  font-weight: $fontWeightLight;
+  color: $baseGrayFontColor;
+}
+
+body {
+  width: 80%;
+  margin: 0 auto;
+  // Ensure we factor padding into the width of the body
+  box-sizing: border-box;
+}
+
+nav {
+  position: absolute;
+  right: 10%;
+  top: 2em;
+  text-align: right;
+
+  a {
+    margin-left: 2em;
+  }
+}
+
+a {
+  font-weight: $fontWeightSemiBold;
+  text-decoration: none;
+  color: $baseGrayFontColor;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: $baseGrayFontColorHover;
+}
+
+main {
+  text-align: center;
+}
+
+header {
+  display: inline-block;
+  height: calc(100vh - 3em);
+}
+
+#HeaderContents {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: column;
+  height: 100%;
+
+  h1 {
+    font-family: LeagueSpartan;
+    font-size: 7em;
+    margin: 0;
+
+    @media #{$breakpoint-medium} {
+      font-size: 5em;
+    }
+
+    @media #{$breakpoint-mobile} {
+      font-size: 3em;
+    }
+  }
+
+  p {
+    font-size: 1.5em;
+    text-align: right;
+    margin: 0;
+
+    @media #{$breakpoint-mobile} {
+      font-size: 1em;
+    }
+  }
+}
+
+#HomepageProjectList {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 5em 2em;
+
+  li {
+    display: inline-block;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  @media #{$breakpoint-medium} {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media #{$breakpoint-mobile} {
+    grid-template-columns: 1fr;
+  }
+}
