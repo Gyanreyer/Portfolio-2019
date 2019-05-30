@@ -1,11 +1,5 @@
-import projects from "./projects.js";
-import history from "./utils/history.js";
-
-function onClickProjectLink(event) {
-  event.preventDefault();
-
-  // window.location.pathname = this.href;
-}
+import projects from "../constants/projects.js";
+import history from "../utils/history.js";
 
 const makeProjectLinkElement = project => {
   const linkElement = document.createElement("a");
@@ -51,12 +45,14 @@ const makeThumbnailElement = project => {
   return thumbnailElement;
 };
 
-export function init() {
-  const projectDisplayList = document.getElementById("HomepageProjectList");
+export default {
+  render: () => {
+    const projectDisplayList = document.getElementById("HomepageProjectList");
 
-  for (let i = 0, numProjects = projects.length; i < numProjects; i++) {
-    const thumbnailElement = makeThumbnailElement(projects[i]);
+    for (let i = 0, numProjects = projects.length; i < numProjects; i++) {
+      const thumbnailElement = makeThumbnailElement(projects[i]);
 
-    projectDisplayList.appendChild(thumbnailElement);
-  }
-}
+      projectDisplayList.appendChild(thumbnailElement);
+    }
+  },
+};

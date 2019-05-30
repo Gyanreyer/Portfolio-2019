@@ -7,7 +7,9 @@ export default [
     desc: "A painting application",
     technologies: ["JavaScript", "React", "CSS", "Python", "Django"],
     primaryLink: "http://waymark.com",
-    image: require("./images/thumbnails/waymark.jpg?sizes[]=1440,sizes[]=720,sizes[]=360")
+    image: require("../images/thumbnails/waymark.jpg?sizes[]=1440,sizes[]=720,sizes[]=360"),
+    primaryThemeColor: "#CCC",
+    secondaryThemeColor: "#222"
   },
   {
     name: "painter",
@@ -21,6 +23,8 @@ export default [
     ],
     primaryLink: "http://rgeyer.com/Painter",
     githubLink: "https://github.com/Gyanreyer/Painter-2",
-    image: require("./images/thumbnails/painter.jpg?sizes[]=1440,sizes[]=720,sizes[]=360")
+    image: require("../images/thumbnails/painter.jpg?sizes[]=1440,sizes[]=720,sizes[]=360"),
+    primaryThemeColor: "#CC6765",
+    secondaryThemeColor: "#FFF"
   }
 ];

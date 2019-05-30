@@ -38,7 +38,9 @@ body, html {
   // Default site-wide font is Aileron-Light
   font-family: Aileron;
   font-weight: $fontWeightLight;
+  background-color: #FFF;
   color: $baseGrayFontColor;
+  transition: 0.3s ease-in-out;
 }
 
 body {
@@ -46,6 +48,10 @@ body {
   margin: 0 auto;
   // Ensure we factor padding into the width of the body
   box-sizing: border-box;
+}
+
+body.Loading {
+  opacity: 0;
 }
 
 nav {
@@ -135,4 +141,66 @@ header {
   @media #{$breakpoint-mobile} {
     grid-template-columns: 1fr;
   }
+}
+
+#project {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4em 10%;
+
+  transition: opacity 0.3s ease-in-out;
+
+  video {
+    width: 50%;
+
+    @media #{$breakpoint-mobile} {
+      width: 100%;
+    }
+  }
+
+  .description {
+    display: inline;
+    vertical-align: top;
+  }
+}
+
+#project.ShouldShowOpenAnimation {
+  animation: fadeIn 0.3s ease-in-out;
+
+  video {
+    animation: showProjectVideo 0.5s ease-in-out;
+  }
+}
+
+#project.FadingOut {
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes showProjectVideo {
+  from {
+    opacity: 0;
+    transform: translateY(20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+footer {
+  border-top: solid 1px #707070;
+  margin-top: 4em;
 }
