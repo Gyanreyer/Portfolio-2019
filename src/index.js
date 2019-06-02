@@ -5,7 +5,7 @@ import Router from "./app/router.js";
 import "./style.scss";
 
 const onDocumentLoaded = () => {
-  document.querySelector(".Loading").className = null;
+  document.querySelector(".loading").classList.remove("loading");
 
   // Do an initial render for our current route
   Router.render();

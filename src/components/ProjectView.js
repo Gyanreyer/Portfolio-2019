@@ -2,6 +2,7 @@ import History from "../app/history.js";
 
 // Adding "!svg-inline-loader!" so that we can get the compiled result for the svg
 import BackButtonIconHTML from "!svg-inline-loader!../images/icons/back_arrow.svg";
+import { lockScrolling, unlockScrolling } from "../utils/view.js";
 
 const projectViewComponentCache = {};
 
@@ -10,8 +11,8 @@ const getProjectViewBackButtonElement = project => {
 
   const backButton = document.createElement("a");
   backButton.href = `/${isInitialPage ? "#projects" : ""}`;
-  backButton.style.color = project.secondaryThemeColor;
-  backButton.className = "back-button";
+
+  backButton.className = `back-button`;
   backButton.addEventListener("click", () => {
     event.preventDefault();
 
@@ -19,17 +20,10 @@ const getProjectViewBackButtonElement = project => {
   });
 
   backButton.innerHTML = BackButtonIconHTML;
-  // Get the element for the SVg we just added
-  const backButtonIcon = backButton.querySelector("svg");
-  backButtonIcon.style.fill = project.secondaryThemeColor;
 
   backButton.appendChild(
     document.createTextNode(isInitialPage ? "Home" : "Back")
   );
-
-  const backButtonLinkUnderline = document.createElement("span");
-  backButtonLinkUnderline.className = "underline";
-  backButton.appendChild(backButtonLinkUnderline);
 
   return backButton;
 };
@@ -42,7 +36,9 @@ const getProjectViewElement = project => {
   } else {
     projectViewElement = document.createElement("section");
     projectViewElement.id = "project-view";
-    projectViewElement.style.color = project.secondaryThemeColor;
+    if (project.textTheme === "light") {
+      projectViewElement.classList.add("light-text");
+    }
 
     const closeButton = getProjectViewBackButtonElement(project);
     projectViewElement.appendChild(closeButton);
@@ -67,17 +63,17 @@ const getProjectViewElement = project => {
   }
 
   if (History.isInitialPage) {
-    projectViewElement.className = "IsVisible";
+    projectViewElement.classList.add("IsVisible");
   } else {
     // Delay applying the visibility styling so we can trigger a CSS transition
     // We have to use this weird requestAnimationFrame + setTimeout combo as it seems to be the most effective cross-browser
     // way to ensure we'll force the styles to re-calculate.
     // Source: https://nolanlawson.com/2018/09/25/accurately-measuring-layout-on-the-web/
     requestAnimationFrame(() => {
-      projectViewElement.className = null;
+      projectViewElement.classList.remove("IsVisible");
 
       setTimeout(() => {
-        projectViewElement.className = "IsVisible";
+        projectViewElement.classList.add("IsVisible");
       });
     });
   }
@@ -91,22 +87,23 @@ export const getProjectViewComponent = project => ({
     document.body.appendChild(projectViewElement);
 
     // Hide the main page contents
-    document.querySelector("main").className = "hidden";
-    document.documentElement.style.backgroundColor = project.primaryThemeColor;
-    document.body.style.backgroundColor = project.primaryThemeColor;
+    document.querySelector("main").classList.add("hidden");
+    document.documentElement.style.backgroundColor = project.primaryColor;
+    // document.body.style.backgroundColor = project.primaryColor;
+
+    lockScrolling();
   },
   unmount: () => {
     // Show main page contents again
-    document.querySelector("main").className = null;
+    document.querySelector("main").classList.remove("hidden");
+    unlockScrolling();
 
     const projectViewElement = document.getElementById("project-view");
 
     if (projectViewElement) {
-      projectViewElement.className = null;
+      projectViewElement.classList.remove("IsVisible");
 
       document.documentElement.style.backgroundColor = null;
-      document.body.style.backgroundColor = null;
-      document.body.style.color = null;
 
       // Remove the project view element from the DOM
       setTimeout(() => {
