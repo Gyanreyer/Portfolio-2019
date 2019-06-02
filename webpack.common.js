@@ -1,6 +1,5 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
-const path = require("path");
 
 module.exports = {
   entry: ["@babel/polyfill", "./src/index.js"],
@@ -27,6 +26,10 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
         loader: "file-loader?name=[name].[ext]"
+      },
+      {
+        test: /\.svg$/,
+        loader: "svg-inline-loader"
       }
     ]
   },
@@ -35,7 +38,15 @@ module.exports = {
       filename: "bundle.css"
     }),
     new HTMLWebpackPlugin({
-      template: "./src/index.html"
+      template: "./src/index.html",
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        useShortDoctype: true
+      }
     })
   ]
 };

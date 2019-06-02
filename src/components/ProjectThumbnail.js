@@ -1,5 +1,5 @@
 import projects from "../constants/projects.js";
-import history from "../utils/history.js";
+import History from "../app/history.js";
 
 const makeProjectLinkElement = project => {
   const linkElement = document.createElement("a");
@@ -13,7 +13,7 @@ const makeProjectLinkElement = project => {
     // and instead manipulate the browser history so that we can keep this an SPA
     event.preventDefault();
 
-    history.push(
+    History.push(
       projectPath,
       {
         project: project.name
@@ -45,14 +45,21 @@ const makeThumbnailElement = project => {
   return thumbnailElement;
 };
 
+let hasRendered = false;
+
 export default {
   render: () => {
-    const projectDisplayList = document.getElementById("HomepageProjectList");
+    // We only want to render these thumbnails once since we aren't removing them from the page afterwards
+    if (hasRendered) return;
+
+    const projectDisplayList = document.getElementById("projects");
 
     for (let i = 0, numProjects = projects.length; i < numProjects; i++) {
       const thumbnailElement = makeThumbnailElement(projects[i]);
 
       projectDisplayList.appendChild(thumbnailElement);
     }
-  },
+
+    hasRendered = true;
+  }
 };
