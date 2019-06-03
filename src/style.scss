@@ -187,6 +187,7 @@ header {
 
   li {
     display: inline-block;
+    text-align: left;
 
     .thumbnail {
       display: block;
@@ -205,18 +206,33 @@ header {
 
     h3 {
       font-weight: bold;
-      text-align: left;
       font-size: 1.5em;
       margin: 0.4em 0 0.2em;
     }
 
     p {
-      text-align: left;
       margin: 0 0 0.3em;
     }
 
     .description {
       text-indent: 1em;
+    }
+
+    .text-link {
+      margin-right: 1.85em;
+
+      svg {
+        width: 1.5em;
+        position: absolute;
+        right: -1.65em;
+        transition: right 0.25s;
+      }
+
+      &:hover {
+        svg {
+          right: -1.85em;
+        }
+      }
     }
   }
 

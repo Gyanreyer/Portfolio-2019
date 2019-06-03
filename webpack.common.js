@@ -21,7 +21,12 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png)$/i,
-        loader: "responsive-loader"
+        loader: "responsive-loader",
+        options: {
+          sizes: [360, 480, 720, 1000],
+          placeholder: true,
+          placeholderSize: 48
+        }
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg)$/,

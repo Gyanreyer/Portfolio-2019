@@ -1,9 +1,11 @@
 import projects from "../constants/projects.js";
 import History from "../app/history.js";
 
+import { getForwardArrowIcon } from "../constants/svg_icons.js";
+
 const makeProjectLinkElement = project => {
   const linkElement = document.createElement("a");
-  linkElement.className = "thumbnail no-underline";
+  linkElement.className = "thumbnail";
   linkElement.setAttribute("title", `Read more about ${project.displayName}`);
 
   const projectPath = `/projects/${project.name}`;
@@ -31,6 +33,7 @@ const makeThumbnailElement = project => {
   const thumbnailElement = document.createElement("li");
 
   const imageWrapperLink = makeProjectLinkElement(project);
+  imageWrapperLink.classList.add("no-underline");
 
   const thumbnailImage = new Image();
   thumbnailImage.src = project.image.src;
@@ -58,25 +61,23 @@ const makeThumbnailElement = project => {
     project.technologies.forEach((technology, index) => {
       if (typeof technology === "string" || technology instanceof String) {
         technologiesUsedDescription.appendChild(
-          document.createTextNode(`${index > 0 ? ", " : ""}${technology}`)
+          document.createTextNode(
+            `${index > 0 ? ", " : ""}${technology.text || technology}`
+          )
         );
-      } else {
-        if (index > 0) {
-          technologiesUsedDescription.appendChild(
-            document.createTextNode(", ")
-          );
-        }
-
-        const technologyLink = document.createElement("a");
-        technologyLink.href = technology.url;
-        technologyLink.innerText = technology.text;
-
-        technologiesUsedDescription.appendChild(technologyLink);
       }
     });
 
     thumbnailElement.appendChild(technologiesUsedDescription);
   }
+
+  const readMoreLink = makeProjectLinkElement(project);
+
+  readMoreLink.className = "text-link";
+  readMoreLink.innerText = "Read more";
+  readMoreLink.appendChild(getForwardArrowIcon());
+
+  thumbnailElement.appendChild(readMoreLink);
 
   return thumbnailElement;
 };

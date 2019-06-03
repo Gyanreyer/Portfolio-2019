@@ -1,7 +1,6 @@
 import History from "../app/history.js";
 
-// Adding "!svg-inline-loader!" so that we can get the compiled result for the svg
-import BackButtonIconHTML from "!svg-inline-loader!../images/icons/back_arrow.svg";
+import { getBackArrowIcon } from "../constants/svg_icons.js";
 import { lockScrolling, unlockScrolling } from "../utils/view.js";
 
 const projectViewComponentCache = {};
@@ -19,7 +18,7 @@ const getProjectViewBackButtonElement = project => {
     History.push(backButton.href);
   });
 
-  backButton.innerHTML = BackButtonIconHTML;
+  backButton.appendChild(getBackArrowIcon());
 
   backButton.appendChild(
     document.createTextNode(isInitialPage ? "Home" : "Back")
