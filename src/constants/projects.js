@@ -8,7 +8,7 @@ export default [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     technologies: ["JavaScript", "React", "CSS", "Python", "Django"],
     primaryLink: "http://waymark.com",
-    image: require("../images/thumbnails/waymark.jpg"),
+    image: require("../resources/thumbnails/waymark.jpg"),
     primaryColor: "#CCC",
     textTheme: "dark"
   },
@@ -25,7 +25,7 @@ export default [
     ],
     primaryLink: "http://rgeyer.com/Painter",
     githubLink: "https://github.com/Gyanreyer/Painter-2",
-    image: require("../images/thumbnails/painter.jpg"),
+    image: require("../resources/thumbnails/painter.jpg"),
     primaryColor: "#45a179",
     textTheme: "light"
   },
@@ -38,7 +38,7 @@ export default [
       "A simple first-person shooter game built from scratch with C++ and DirectX11 in which the player must kill all enemies in the environment without being killed themselves. This game was made in a team with 2 other students in which I served as the primary gameplay programmer. It was made over the course of about 2 months as a class project for Foundations of Game Graphics Programming, Fall 2017.",
     technologies: ["C++", "DirectX11"],
     githubLink: "https://github.com/Gyanreyer/GGP-Game-Engine",
-    image: require("../images/thumbnails/spookemup.jpg"),
+    image: require("../resources/thumbnails/spookemup.jpg"),
     primaryColor: "#b8643d",
     textTheme: "light"
   },
@@ -57,7 +57,8 @@ export default [
       }
     ],
     primaryLink: "https://github.com/Gyanreyer/RocketKick",
-    image: require("../images/thumbnails/rocketkick.jpg"),
+    image: require("../resources/thumbnails/rocketkick.jpg"),
+    video: require("../resources/videos/rocketkick.mp4"),
     primaryColor: "#b65483",
     textTheme: "light"
   }

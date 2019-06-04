@@ -29,7 +29,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
+        test: /\.(otf|mp4)$/,
         loader: "file-loader?name=[name].[ext]"
       },
       {

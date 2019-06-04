@@ -1,5 +1,5 @@
-import backArrowSVG from "!svg-inline-loader!../images/icons/back_arrow.svg";
-import forwardArrowSVG from "!svg-inline-loader!../images/icons/forward_arrow.svg";
+import backArrowSVG from "!svg-inline-loader!../resources/icons/back_arrow.svg";
+import forwardArrowSVG from "!svg-inline-loader!../resources/icons/forward_arrow.svg";
 
 export const getBackArrowIcon = () => {
   const backArrowIconWrapper = document.createElement("span");

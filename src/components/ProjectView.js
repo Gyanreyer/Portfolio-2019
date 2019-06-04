@@ -52,8 +52,11 @@ const getProjectViewElement = project => {
     projectViewContentsWrapper.appendChild(projectTitle);
 
     const video = document.createElement("video");
+    video.id = "project-video";
+    video.setAttribute("src", project.video);
     video.setAttribute("poster", project.image.src);
-    // TODO: set the video src
+    video.setAttribute("autoplay", true);
+    video.setAttribute("loop", true);
     projectViewContentsWrapper.appendChild(video);
 
     const projectDescription = document.createElement("p");
@@ -98,6 +101,11 @@ export const getProjectViewComponent = project => ({
 
     if (openingProjectThumbnail) {
       openingProjectThumbnail.classList.add("opening");
+    }
+
+    const projectVideo = document.getElementById("project-video");
+    if (projectVideo) {
+      projectVideo.play();
     }
 
     lockScrolling();
