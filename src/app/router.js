@@ -3,7 +3,7 @@ import { getSanitizedPathname } from "../utils/urls.js";
 import projects from "../constants/projects.js";
 
 // Components
-import ProjectThumbnail from "../components/ProjectThumbnail.js";
+import DynamicHomepageContents from "../components/HomePage.js";
 import { getProjectViewComponent } from "../components/ProjectView.js";
 
 export class Router {
@@ -11,7 +11,7 @@ export class Router {
     // Set up our registered route paths
     this.registeredPaths = {
       "/": {
-        component: ProjectThumbnail,
+        component: DynamicHomepageContents,
         title: "Ryan Geyer | Creative Web Developer in Detroit"
       }
     };

@@ -131,17 +131,12 @@ a {
 
 main {
   text-align: center;
-
-  transition: opacity 0.3s ease-in-out;
-
-  &.hidden {
-    opacity: 0;
-  }
+  padding-bottom: 1.25em;
 }
 
 header {
   display: inline-block;
-  height: calc(100vh - 3em);
+  height: calc(100vh - 6em);
 }
 
 #HeaderContents {
@@ -178,12 +173,12 @@ header {
 
 #projects {
   width: 100%;
-  padding: 0;
+  padding: 3em 0 0;
   margin: 0;
   list-style: none;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 5em 2em;
+  grid-gap: 2em;
 
   li {
     display: inline-block;
@@ -191,16 +186,25 @@ header {
 
     .thumbnail {
       display: block;
-      transition: opacity 0.25s, transform 0.25s;
+      transform-origin: bottom;
+      top: 0;
+      transition: opacity 0.25s, top 0.25s;
+      transition-timing-function: ease-in-out;
 
       img {
         width: 100%;
         display: block;
       }
 
-      &:hover {
+      &.opening {
+        top: -30%;
+        opacity: 0;
+        transition-duration: 0.3s;
+      }
+
+      &:hover, &.hovered {
         opacity: 0.85;
-        transform: translateY(-3%);
+        top: -2%;
       }
     }
 
@@ -252,15 +256,28 @@ header {
   left: 0;
   right: 0;
   padding: 4em 10%;
+  opacity: 0;
+  transition: opacity 0.3s;
 
   // & is sass shorthand used in nested selectors to refer to the parent selector,
-  // so in this case it refers to #project-view.IsVisible
-  &, video, .description {
+  // so in this case it refers to #project-view
+  .contents-wrapper, video, .description {
     opacity: 0;
     transform: translateY(5%);
     transition: opacity, transform;
     transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
+  }
+
+  &.visible {
+    opacity: 1;
+    transition-duration: 0.5s;
+
+    .contents-wrapper, video, .description {
+      opacity: 1;
+      transform: translateY(0);
+      transition-duration: 0.5s;
+    }
   }
 
   h1 {
@@ -309,15 +326,46 @@ header {
   }
 }
 
-#project-view.IsVisible {
-  &, video, .description {
-    opacity: 1;
-    transform: translateY(0);
-    transition-duration: 0.5s;
-  }
-}
-
 footer {
   border-top: solid 1px #707070;
   margin-top: 4em;
+
+  .links {
+    display: flex;
+    justify-content: center;
+    margin: 1em 0;
+
+    .link-column {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-right: 5em;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      a {
+        text-align: left;
+        font-size: 1.2em;
+        margin-bottom: 0.1em;
+      }
+
+      @media #{$breakpoint-mobile} {
+        margin-right: 2em;
+      }
+    }
+  }
+
+  p {
+    margin: 0.5em 0;
+
+    .copyright {
+      margin-left: 1em;
+
+      @media #{$breakpoint-mobile} {
+        display: block;
+      }
+    }
+  }
 }
