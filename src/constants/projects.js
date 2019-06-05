@@ -37,6 +37,7 @@ export default [
     desc:
       "A simple first-person shooter game built from scratch with C++ and DirectX11 in which the player must kill all enemies in the environment without being killed themselves. This game was made in a team with 2 other students in which I served as the primary gameplay programmer. It was made over the course of about 2 months as a class project for Foundations of Game Graphics Programming, Fall 2017.",
     technologies: ["C++", "DirectX11"],
+    primaryLink: "https://github.com/Gyanreyer/GGP-Game-Engine/releases",
     githubLink: "https://github.com/Gyanreyer/GGP-Game-Engine",
     image: require("../resources/thumbnails/spookemup.jpg"),
     primaryColor: "#b8643d",
@@ -56,6 +57,7 @@ export default [
         url: "https://unity.com/"
       }
     ],
+    primaryLink: "https://github.com/Gyanreyer/RocketKick/releases",
     githubLink: "https://github.com/Gyanreyer/RocketKick",
     image: require("../resources/thumbnails/rocketkick.jpg"),
     video: require("../resources/videos/rocketkick.mp4"),

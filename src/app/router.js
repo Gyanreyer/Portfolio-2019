@@ -5,6 +5,7 @@ import projects from "../constants/projects.js";
 // Components
 import DynamicHomepageContents from "../components/HomePage.js";
 import { getProjectViewComponent } from "../components/ProjectView.js";
+import ContactView from "../components/ContactView.js";
 
 export class Router {
   constructor() {
@@ -13,6 +14,10 @@ export class Router {
       "/": {
         component: DynamicHomepageContents,
         title: "Ryan Geyer | Creative Web Developer in Detroit"
+      },
+      "/contact": {
+        component: ContactView,
+        title: "Ryan Geyer | Contact"
       }
     };
 
