@@ -56,7 +56,7 @@ export default [
         url: "https://unity.com/"
       }
     ],
-    primaryLink: "https://github.com/Gyanreyer/RocketKick",
+    githubLink: "https://github.com/Gyanreyer/RocketKick",
     image: require("../resources/thumbnails/rocketkick.jpg"),
     video: require("../resources/videos/rocketkick.mp4"),
     primaryColor: "#b65483",

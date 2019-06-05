@@ -1,6 +1,10 @@
 import History from "../app/history.js";
 
-import { getBackArrowIcon } from "../constants/svg_icons.js";
+import {
+  getBackArrowIcon,
+  getGithubIcon,
+  getLinkIcon
+} from "../constants/svg_icons.js";
 import { lockScrolling, unlockScrolling } from "../utils/view.js";
 
 const projectViewComponentCache = {};
@@ -56,14 +60,72 @@ const getProjectViewElement = project => {
     video.setAttribute("src", project.video);
     video.setAttribute("poster", project.image.src);
     video.setAttribute("autoplay", true);
+    video.setAttribute("muted", true);
     video.setAttribute("loop", true);
+
     projectViewContentsWrapper.appendChild(video);
+
+    const projectLinks = document.createElement("div");
+    projectLinks.className = "project-links";
+
+    if (project.primaryLink) {
+      const primaryLink = document.createElement("a");
+      primaryLink.appendChild(getLinkIcon());
+      primaryLink.href = project.primaryLink;
+      primaryLink.target = "_blank";
+      primaryLink.rel = "noopener noreferrer";
+
+      primaryLink.appendChild(document.createTextNode("Check it out"));
+
+      projectLinks.appendChild(primaryLink);
+    }
+    if (project.githubLink) {
+      const githubLink = document.createElement("a");
+      githubLink.className = "github-link";
+      githubLink.appendChild(getGithubIcon());
+      githubLink.href = project.githubLink;
+      githubLink.target = "_blank";
+      githubLink.rel = "noopener noreferrer";
+
+      githubLink.appendChild(document.createTextNode("GitHub repo"));
+
+      projectLinks.appendChild(githubLink);
+    }
+
+    projectViewContentsWrapper.appendChild(projectLinks);
 
     const projectDescription = document.createElement("p");
     projectDescription.className = "description";
     projectDescription.innerText = project.desc;
 
     projectViewContentsWrapper.appendChild(projectDescription);
+
+    const numTechnologies = project.technologies.length;
+
+    const projectTechnologiesList = document.createElement("p");
+    projectTechnologiesList.innerText = "Technologies used: ";
+
+    project.technologies.forEach((technology, index) => {
+      if (technology.url) {
+        const technologyLink = document.createElement("a");
+        technologyLink.href = technology.url;
+        technologyLink.target = "_blank";
+        technologyLink.rel = "noopener noreferrer";
+        technologyLink.innerText = technology.text;
+
+        projectTechnologiesList.appendChild(technologyLink);
+      } else {
+        projectTechnologiesList.appendChild(
+          document.createTextNode(technology)
+        );
+      }
+
+      if (index < numTechnologies - 1) {
+        projectTechnologiesList.appendChild(document.createTextNode(", "));
+      }
+    });
+
+    projectViewContentsWrapper.appendChild(projectTechnologiesList);
 
     projectViewElement.appendChild(projectViewContentsWrapper);
 
@@ -103,9 +165,25 @@ export const getProjectViewComponent = project => ({
       openingProjectThumbnail.classList.add("opening");
     }
 
-    const projectVideo = document.getElementById("project-video");
-    if (projectVideo) {
-      projectVideo.play();
+    document.documentElement.style.backgroundColor = project.primaryColor;
+
+    const projectVideo = projectViewElement.querySelector("video");
+
+    if (projectVideo.paused || projectVideo.ended || projectVideo.scrubbing) {
+      const playVideoPromise = projectVideo.play();
+
+      if (playVideoPromise !== undefined) {
+        playVideoPromise.catch(() => {
+          // If the play promise was rejected, show controls on the video
+          // so the user can start it themselves
+          projectVideo.setAttribute("controls", true);
+
+          // When the video starts playing, remove the controls
+          projectVideo.addEventListener("playing", () => {
+            projectVideo.removeAttribute("controls");
+          });
+        });
+      }
     }
 
     lockScrolling();
@@ -120,6 +198,8 @@ export const getProjectViewComponent = project => ({
     if (openingProjectThumbnail) {
       openingProjectThumbnail.classList.remove("opening");
     }
+
+    document.documentElement.style.backgroundColor = null;
 
     const projectViewElement = document.getElementById("project-view");
 

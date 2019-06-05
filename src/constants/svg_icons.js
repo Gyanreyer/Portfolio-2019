@@ -1,16 +1,19 @@
 import backArrowSVG from "!svg-inline-loader!../resources/icons/back_arrow.svg";
 import forwardArrowSVG from "!svg-inline-loader!../resources/icons/forward_arrow.svg";
+import githubSVG from "!svg-inline-loader!../resources/icons/github.svg";
+import linkSVG from "!svg-inline-loader!../resources/icons/link.svg";
 
-export const getBackArrowIcon = () => {
-  const backArrowIconWrapper = document.createElement("span");
-  backArrowIconWrapper.innerHTML = backArrowSVG;
+const makeIconElement = svgString => {
+  const wrapperSpan = document.createElement("span");
+  wrapperSpan.innerHTML = svgString;
 
-  return backArrowIconWrapper;
+  return wrapperSpan.firstChild;
 };
 
-export const getForwardArrowIcon = () => {
-  const forwardArrowIconWrapper = document.createElement("span");
-  forwardArrowIconWrapper.innerHTML = forwardArrowSVG;
+export const getBackArrowIcon = () => makeIconElement(backArrowSVG);
 
-  return forwardArrowIconWrapper;
-};
+export const getForwardArrowIcon = () => makeIconElement(forwardArrowSVG);
+
+export const getGithubIcon = () => makeIconElement(githubSVG);
+
+export const getLinkIcon = () => makeIconElement(linkSVG);
