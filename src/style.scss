@@ -2,8 +2,8 @@ $fontWeightLight: 300;
 $fontWeightSemiBold: 500;
 $fontWeightBold: 700;
 
-$baseDarkFontColor: #222;
-$baseLightFontColor: #fff;
+$baseDarkColor: #222;
+$baseLightColor: #fff;
 
 $breakpoint-medium: "only screen and (max-width : 900px)";
 $breakpoint-mobile: "only screen and (max-width : 600px)";
@@ -42,12 +42,12 @@ body, html {
   // Default site-wide font is Aileron-Light
   font-family: Aileron;
   font-weight: $fontWeightLight;
-  color: $baseDarkFontColor;
+  color: $baseDarkColor;
   transition: 0.3s ease-in-out;
 }
 
 html {
-  background-color: #FFF;
+  background-color: $baseLightColor;
 }
 
 body {
@@ -66,14 +66,14 @@ body.Loading {
 }
 
 svg {
-  fill: $baseDarkFontColor;
+  fill: $baseDarkColor;
 }
 
 .light-text { 
-  color: $baseLightFontColor;
+  color: $baseLightColor;
 
   svg {
-    fill: $baseLightFontColor;
+    fill: $baseLightColor;
   }
 }
 
@@ -89,7 +89,7 @@ nav {
 }
 
 a {
-  color: $baseDarkFontColor;
+  color: $baseDarkColor;
   font-weight: $fontWeightSemiBold;
   text-decoration: none;
   transition: opacity 0.25s;
@@ -106,7 +106,7 @@ a {
     right: 0;
     width: 0;
     height: 1px;
-    background-color: $baseDarkFontColor;
+    background-color: $baseDarkColor;
     opacity: 0.75;
     transition: width 0.25s ease-in-out;
   }
@@ -121,10 +121,10 @@ a {
   }
 
   .light-text & {
-    color: $baseLightFontColor;
+    color: $baseLightColor;
 
     &::after {
-      background-color: $baseLightFontColor;
+      background-color: $baseLightColor;
     }
   }
 }
@@ -188,7 +188,8 @@ header {
       display: block;
       transform-origin: bottom;
       top: 0;
-      transition: opacity 0.25s, top 0.25s;
+      transition: opacity, top;
+      transition-duration: 0.25s;
       transition-timing-function: ease-in-out;
 
       img {
@@ -199,7 +200,7 @@ header {
       &.opening {
         top: -30%;
         opacity: 0;
-        transition-duration: 0.3s;
+        transition-duration: 0.2s;
       }
 
       &:hover, &.hovered {
@@ -249,12 +250,29 @@ header {
   }
 }
 
+.back-button {
+  margin-left: 1.3em;
+
+  svg {
+    position: absolute;
+    left: -1.5em;
+    width: 1.25em;
+    transition: left 0.25s, opacity 0.25s;
+  }
+
+  &:hover svg {
+    left: -1.7em;
+    opacity: 0.75;
+  }
+}
+
 #project-view {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 5;
   overflow: scroll;
   padding: 4em 10%;
   opacity: 0;
@@ -313,29 +331,12 @@ header {
   }
 
   p {
-    display: block;
     transition-delay: 0.3s;
     font-size: 1.1em;
     line-height: 1.3;
 
     @media #{$breakpoint-mobile} {
       margin-left: 0;
-    }
-  }
-
-  .back-button {
-    margin-left: 1.3em;
-
-    svg {
-      position: absolute;
-      left: -1.5em;
-      width: 1.25em;
-      transition: left 0.25s, opacity 0.25s;
-    }
-
-    &:hover svg {
-      left: -1.7em;
-      opacity: 0.75;
     }
   }
 
@@ -366,6 +367,86 @@ header {
 
   .description {
     margin: 1em 0 2em;
+  }
+}
+
+#contact-view {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: scroll;
+  padding: 4em 10%;
+  background-color: $baseLightColor;
+  opacity: 0;
+  transition: opacity 0.3s;
+
+  h1 {
+    font-family: LeagueSpartan;
+    font-size: 4em;
+    margin: 0.7em 0 0.1em;
+
+    @media #{$breakpoint-medium} {
+      font-size: 3em;
+    }
+
+    @media #{$breakpoint-mobile} {
+      font-size: 2em;
+    }
+  }
+
+  p {
+    font-size: 1.2em;
+    line-height: 1.3;
+    margin-left: 3em;
+
+    @media #{$breakpoint-mobile} {
+      margin-left: 0;
+    }
+  }
+
+  p:nth-child(2) {
+    transition-delay: 0.15s;
+  }
+
+  @for $i from 3 to 10 {
+    p:nth-child(#{$i}) { transition-delay: 0.05s + ($i * 0.05s); }
+  }
+
+
+  h1, p {
+    transform: translateX(4%);
+    opacity: 0;
+    transition: transform, opacity;
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.3s;
+  }
+
+  .contents-wrapper {
+    width: 55%;
+    
+    @media #{$breakpoint-medium} {
+      width: 80%;
+    }
+
+    @media #{$breakpoint-mobile} {
+      width: 100%;
+      margin: 0;
+    }
+  }
+
+  &.visible {
+    opacity: 1;
+
+    .contents-wrapper {
+      opacity: 1;
+    }
+
+    h1, p {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
 }
 

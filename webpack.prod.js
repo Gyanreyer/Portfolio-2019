@@ -1,5 +1,4 @@
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const CompressionPlugin = require("compression-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const path = require("path");
 
@@ -15,7 +14,6 @@ module.exports = merge(common, {
   plugins: [
     ...common.plugins,
     new OptimizeCssAssetsPlugin(),
-    new CompressionPlugin()
   ],
   optimization: {
     minimizer: [new TerserPlugin()]

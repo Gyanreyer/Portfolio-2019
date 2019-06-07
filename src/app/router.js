@@ -3,20 +3,24 @@ import { getSanitizedPathname } from "../utils/urls.js";
 import projects from "../constants/projects.js";
 
 // Components
-import DynamicHomepageContents from "../components/HomePage.js";
 import { getProjectViewComponent } from "../components/ProjectView.js";
 import ContactView from "../components/ContactView.js";
+import HomePage from "../components/HomePage.js";
 
-export class Router {
+class Router {
   constructor() {
+    this.initialize = this.initialize.bind(this);
+  }
+
+  initialize() {
     // Set up our registered route paths
     this.registeredPaths = {
       "/": {
-        component: DynamicHomepageContents,
+        component: new HomePage(),
         title: "Ryan Geyer | Creative Web Developer in Detroit"
       },
       "/contact": {
-        component: ContactView,
+        component: new ContactView(),
         title: "Ryan Geyer | Contact"
       }
     };
@@ -29,6 +33,8 @@ export class Router {
         title: `Projects | ${project.displayName}`
       };
     }
+
+    this.render();
   }
 
   render(currentPath = getSanitizedPathname(), lastPath) {

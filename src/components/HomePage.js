@@ -4,62 +4,64 @@ import { smoothScroll } from "../utils/view.js";
 
 import { getForwardArrowIcon } from "../constants/svg_icons.js";
 
-const makeProjectLinkElement = project => {
-  const linkElement = document.createElement("a");
-  linkElement.setAttribute("title", `Read more about ${project.displayName}`);
+class ProjectThumbnail {
+  constructor(project) {
+    this.project = project;
 
-  const projectPath = `/projects/${project.name}`;
+    this.render = this.render.bind(this);
+    this.getProjectLinkElement = this.getProjectLinkElement.bind(this);
+    this.getThumbnailImage = this.getThumbnailImage.bind(this);
+    this.getProjectTitle = this.getProjectTitle.bind(this);
+    this.getTechnologiesList = this.getTechnologiesList.bind(this);
+  }
 
-  linkElement.href = projectPath;
+  getProjectLinkElement() {
+    const projectPath = `/projects/${this.project.name}`;
 
-  linkElement.addEventListener("click", event => {
-    // Prevent the default browser behavior so that we don't hard load the next url,
-    // and instead manipulate the browser history so that we can keep this an SPA
-    event.preventDefault();
+    const linkElement = document.createElement("a");
+    linkElement.href = projectPath;
+    linkElement.setAttribute("title", `Read more about ${this.project.displayName}`);
 
-    History.push(
-      projectPath,
-      {
-        project: project.name
-      },
-      `Ryan Geyer | ${project.displayName}`
-    );
-  });
+    linkElement.addEventListener("click", event => {
+      // Prevent the default browser behavior so that we don't hard load the next url,
+      // and instead manipulate the browser history so that we can keep this an SPA
+      event.preventDefault();
 
-  return linkElement;
-};
+      History.push(
+        projectPath,
+        {
+          project: this.project.name
+        },
+        `Ryan Geyer | ${this.project.displayName}`
+      );
+    });
 
-const makeThumbnailElement = project => {
-  const thumbnailElement = document.createElement("li");
-  thumbnailElement.className = project.name;
+    return linkElement;
+  }
 
-  const imageWrapperLink = makeProjectLinkElement(project);
-  imageWrapperLink.className = `thumbnail ${project.name} no-underline`;
+  getThumbnailImage() {
+    const thumbnailImage = new Image();
+    thumbnailImage.src = this.project.image.src;
+    thumbnailImage.srcset = this.project.image.srcSet;
+    thumbnailImage.alt = `${this.project.displayName} thumbnail`;
 
-  const thumbnailImage = new Image();
-  thumbnailImage.src = project.image.src;
-  thumbnailImage.srcset = project.image.srcSet;
-  thumbnailImage.alt = `${project.displayName} thumbnail`;
+    return thumbnailImage;
+  }
 
-  imageWrapperLink.appendChild(thumbnailImage);
-  thumbnailElement.appendChild(imageWrapperLink);
+  getProjectTitle() {
+    const projectTitle = document.createElement("h3");
+    projectTitle.innerText = this.project.displayName;
 
-  const projectTitle = document.createElement("h3");
-  projectTitle.innerText = project.displayName;
-  thumbnailElement.appendChild(projectTitle);
+    return projectTitle;
+  }
 
-  const projectDescription = document.createElement("p");
-  projectDescription.className = "description";
-  projectDescription.innerText = project.shortDesc;
-  thumbnailElement.appendChild(projectDescription);
-
-  if (project.technologies) {
+  getTechnologiesList() {
     const technologiesUsedDescription = document.createElement("p");
     technologiesUsedDescription.appendChild(
       document.createTextNode("Technologies used: ")
     );
 
-    project.technologies.forEach((technology, index) => {
+    this.project.technologies.forEach((technology, index) => {
       technologiesUsedDescription.appendChild(
         document.createTextNode(
           `${index > 0 ? ", " : ""}${technology.text || technology}`
@@ -67,50 +69,107 @@ const makeThumbnailElement = project => {
       );
     });
 
-    thumbnailElement.appendChild(technologiesUsedDescription);
+    return technologiesUsedDescription;
   }
 
-  const readMoreLink = makeProjectLinkElement(project);
+  render() {
+    // If the thumbnail has already been rendered, we don't need to do anything again
+    if (this.cachedThumbnailElement) return;
 
-  readMoreLink.className = "text-link";
-  readMoreLink.innerText = "Read more";
-  readMoreLink.appendChild(getForwardArrowIcon());
-  readMoreLink.addEventListener("mouseenter", () => {
-    imageWrapperLink.classList.add("hovered");
-  });
-  readMoreLink.addEventListener("mouseleave", () => {
-    imageWrapperLink.classList.remove("hovered");
-  });
-
-  thumbnailElement.appendChild(readMoreLink);
-
-  return thumbnailElement;
-};
-
-let hasRendered = false;
-
-export default {
-  render: () => {
-    // We only want to render these thumbnails once since we aren't removing them from the page afterwards
-    if (hasRendered) return;
-
+    // Get element for display list that we want to render to
     const projectDisplayList = document.getElementById("projects");
 
-    for (let i = 0, numProjects = projects.length; i < numProjects; i++) {
-      const thumbnailElement = makeThumbnailElement(projects[i]);
+    const thumbnailElement = document.createElement("li");
+    thumbnailElement.className = this.project.name;
 
-      projectDisplayList.appendChild(thumbnailElement);
+    const imageWrapperLink = this.getProjectLinkElement();
+    imageWrapperLink.className = `thumbnail ${this.project.name} no-underline`;
+    imageWrapperLink.appendChild(this.getThumbnailImage());
+
+    thumbnailElement.appendChild(imageWrapperLink);
+
+    thumbnailElement.appendChild(this.getProjectTitle());
+
+    const projectDescription = document.createElement("p");
+    projectDescription.className = "description";
+    projectDescription.innerText = this.project.shortDesc;
+    thumbnailElement.appendChild(projectDescription);
+
+    if (this.project.technologies) {
+      thumbnailElement.appendChild(this.getTechnologiesList());
     }
 
-    const projectLinks = document.querySelectorAll(".project-link");
+    const readMoreLink = this.getProjectLinkElement();
 
+    readMoreLink.className = "text-link";
+    readMoreLink.innerText = "Read more";
+    readMoreLink.appendChild(getForwardArrowIcon());
+    readMoreLink.addEventListener("mouseenter", () => {
+      imageWrapperLink.classList.add("hovered");
+    });
+    readMoreLink.addEventListener("mouseleave", () => {
+      imageWrapperLink.classList.remove("hovered");
+    });
+
+    thumbnailElement.appendChild(readMoreLink);
+
+    this.cachedThumbnailElement = thumbnailElement;
+
+    // Append the thumbnail to the project display list
+    projectDisplayList.appendChild(thumbnailElement);
+  }
+}
+
+export default class HomePage {
+  constructor() {
     const onClickScrollToProjects = () =>
-      smoothScroll(projectDisplayList.offsetTop);
+      smoothScroll(document.getElementById("projects").offsetTop);
 
-    projectLinks.forEach(projectLink => {
+    document.querySelectorAll(".project-link").forEach(projectLink => {
       projectLink.addEventListener("click", onClickScrollToProjects);
     });
 
-    hasRendered = true;
+    document.getElementById("contact-link").addEventListener("click", event => {
+      // Prevent the default browser behavior so that we don't hard load the next url,
+      // and instead manipulate the browser history so that we can keep this an SPA
+      event.preventDefault();
+
+      History.push(
+        "/contact",
+        {
+          page: "contact"
+        },
+        `Ryan Geyer | Contact`
+      );
+    });
+
+    document.getElementById("about-link").addEventListener("click", event => {
+      event.preventDefault();
+
+      History.push(
+        "/about",
+        {
+          page: "about"
+        },
+        `Ryan Geyer | About Me`
+      );
+    });
+
+    this.thumbnailComponents = projects.map(
+      project => new ProjectThumbnail(project)
+    );
+
+    this.render = this.render.bind(this);
   }
-};
+
+  render() {
+    // We only want to render these thumbnails once since we aren't removing them from the page afterwards
+    if (this.hasRendered) return;
+
+    this.thumbnailComponents.forEach(thumbnailComponent =>
+      thumbnailComponent.render()
+    );
+
+    this.hasRendered = true;
+  }
+}

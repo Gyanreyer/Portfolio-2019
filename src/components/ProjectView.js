@@ -1,35 +1,13 @@
 import History from "../app/history.js";
 
 import {
-  getBackArrowIcon,
   getGithubIcon,
   getLinkIcon
 } from "../constants/svg_icons.js";
 import { lockScrolling, unlockScrolling } from "../utils/view.js";
+import BackButton from './BackButton.js';
 
 const projectViewComponentCache = {};
-
-const getProjectViewBackButtonElement = project => {
-  const isInitialPage = History.isInitialPage;
-
-  const backButton = document.createElement("a");
-  backButton.href = "/";
-
-  backButton.className = `back-button`;
-  backButton.addEventListener("click", () => {
-    event.preventDefault();
-
-    History.push(backButton.href);
-  });
-
-  backButton.appendChild(getBackArrowIcon());
-
-  backButton.appendChild(
-    document.createTextNode(isInitialPage ? "Home" : "Back")
-  );
-
-  return backButton;
-};
 
 const getProjectViewElement = project => {
   let projectViewElement;
@@ -48,7 +26,7 @@ const getProjectViewElement = project => {
     const projectViewContentsWrapper = document.createElement("div");
     projectViewContentsWrapper.className = "contents-wrapper";
 
-    const closeButton = getProjectViewBackButtonElement(project);
+    const closeButton = BackButton.render(projectViewElement);
     projectViewContentsWrapper.appendChild(closeButton);
 
     const projectTitle = document.createElement("h1");

@@ -7,8 +7,8 @@ import "./style.scss";
 const onDocumentLoaded = () => {
   document.querySelector(".loading").classList.remove("loading");
 
-  // Do an initial render for our current route
-  Router.render();
+  // Set up our router and do an initial render
+  Router.initialize();
 };
 
 if (document.readyState === "loading") {
