@@ -1,0 +1,165 @@
+@import './variables.scss';
+
+@font-face {
+  font-family: LeagueSpartan;
+  font-display: swap;
+  src: url('./fonts/LeagueSpartan-Bold.otf') format('opentype');
+  font-weight: $fontWeightBold;
+}
+
+@font-face {
+  font-family: Aileron;
+  font-display: swap;
+  src: url('./fonts/Aileron-Light.otf') format('opentype');
+  font-weight: $fontWeightLight;
+}
+
+@font-face {
+  font-family: Aileron;
+  font-display: swap;
+  src: url('./fonts/Aileron-SemiBold.otf') format('opentype');
+  font-weight: $fontWeightSemiBold;
+}
+
+@font-face {
+  font-family: Aileron;
+  font-display: swap;
+  src: url('./fonts/Aileron-Bold.otf') format('opentype');
+  font-weight: $fontWeightBold;
+}
+
+html {
+  // Default site-wide font is Aileron-Light
+  font-family: Aileron;
+  font-weight: $fontWeightLight;
+  min-height: 100vh;
+  color: $baseDarkColor;
+  background-color: $baseLightColor;
+  transition: 0.3s background-color;
+}
+
+body {
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
+  padding-bottom: 1.25em;
+}
+
+// SVGs are filled with dark color by default
+svg {
+  fill: $baseDarkColor;
+}
+
+// When light text class is applied, make text color and svg fill light
+.light-text {
+  color: $baseLightColor;
+
+  svg {
+    fill: $baseLightColor;
+  }
+}
+
+// Defines standard site-wide styling for text links
+a {
+  color: $baseDarkColor;
+  font-weight: $fontWeightSemiBold;
+  text-decoration: none;
+  transition: opacity 0.25s;
+  position: relative;
+
+  // Don't add any content after if we don't want an underline
+  &.no-underline::after {
+    content: none;
+  }
+
+  // Underline which expands width whent he user hovers
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    // When not hovered, make the line justify to the right so that as it shrinks, it appears to be
+    // sliding out to the right rather than the left
+    right: 0;
+    // When not hovered, line has 0 width
+    width: 0;
+    height: 1px;
+    background-color: $baseDarkColor;
+    opacity: 0.75;
+    transition: width 0.25s ease-in-out;
+  }
+
+  &:hover {
+    opacity: 0.75;
+
+    &::after {
+      // When hovered, make line justify to the left so that as it grows, it appears to be
+      // sliding in from the left
+      left: 0;
+      right: auto;
+      width: 100%;
+    }
+  }
+
+  // Set color of link and underline to light color if the link should display light text
+  .light-text & {
+    color: $baseLightColor;
+
+    &::after {
+      background-color: $baseLightColor;
+    }
+  }
+}
+
+h1, p, figure {
+  margin: 0;
+}
+
+main {
+  text-align: center;
+}
+
+.back-button a {
+  margin-left: 1.3em;
+
+  svg {
+    position: absolute;
+    left: -1.5em;
+    width: 1.25em;
+    transition: left 0.25s, opacity 0.25s;
+  }
+
+  &:hover svg {
+    left: -1.7em;
+    opacity: 0.75;
+  }
+}
+
+.view {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  overflow: scroll;
+  padding: 4em 10%;
+  opacity: 0;
+  transition: opacity 0.3s;
+
+  & > * {
+    opacity: 0;
+    transform: translateY(3vh);
+    transition: opacity, transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+  }
+
+  &.visible {
+    opacity: 1;
+
+    & > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

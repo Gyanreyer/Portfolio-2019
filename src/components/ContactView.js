@@ -1,6 +1,6 @@
-import History from "../app/history.js";
+import history from "../app/history.js";
 import { lockScrolling, unlockScrolling } from "../utils/view.js";
-import BackButton from "./BackButton.js";
+import { makeBackButton } from "./RouterLink.js";
 
 export default class ContactView {
   constructor() {
@@ -13,7 +13,7 @@ export default class ContactView {
     const contactViewElement = document.createElement("section");
     contactViewElement.id = "contact-view";
 
-    contactViewElement.appendChild(BackButton.render());
+    contactViewElement.appendChild(makeBackButton());
 
     const pageTitle = document.createElement("h1");
     pageTitle.innerText = "We'll be in touch.";
@@ -21,6 +21,7 @@ export default class ContactView {
     contactViewElement.appendChild(pageTitle);
 
     const subTitle = document.createElement("p");
+    subTitle.className = "subheader";
     subTitle.innerText = "I’m looking forward to meeting you. ";
     // Add a handshake emoji to the subtitle
     subTitle.appendChild(
@@ -30,6 +31,7 @@ export default class ContactView {
     contactViewElement.appendChild(subTitle);
 
     const resumeLinkWrapper = document.createElement("p");
+    resumeLinkWrapper.className = "contact-view-link";
     const resumeLink = document.createElement("a");
     resumeLink.innerText = `Resum${String.fromCodePoint(233)}`;
     resumeLink.href = "/Ryan_Geyer_Resume.pdf";
@@ -40,6 +42,7 @@ export default class ContactView {
     contactViewElement.appendChild(resumeLinkWrapper);
 
     const emailLinkWrapper = document.createElement("p");
+    emailLinkWrapper.className = "contact-view-link";
     const emailLink = document.createElement("a");
     emailLink.innerText = "Email";
     emailLink.href = "mailto:ryan@geyer.dev";
@@ -50,6 +53,7 @@ export default class ContactView {
     contactViewElement.appendChild(emailLinkWrapper);
 
     const linkedinLinkWrapper = document.createElement("p");
+    linkedinLinkWrapper.className = "contact-view-link";
     const linkedinLink = document.createElement("a");
     linkedinLink.innerText = "LinkedIn";
     linkedinLink.href = "https://www.linkedin.com/in/gyanreyer";
@@ -59,7 +63,7 @@ export default class ContactView {
     linkedinLinkWrapper.appendChild(linkedinLink);
     contactViewElement.appendChild(linkedinLinkWrapper);
 
-    if (History.isInitialPage) {
+    if (history.isInitialPage) {
       contactViewElement.classList.add("visible");
     } else {
       // Delay applying the visibility styling so we can trigger a CSS transition

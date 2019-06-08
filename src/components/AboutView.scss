@@ -1,0 +1,18 @@
+@import '../variables.scss';
+
+#about-view {
+  background-color: $baseLightColor;
+
+  .contents-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+
+    h1 {
+      font-size: 3em;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+}

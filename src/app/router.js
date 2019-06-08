@@ -3,9 +3,9 @@ import { getSanitizedPathname } from "../utils/urls.js";
 import projects from "../constants/projects.js";
 
 // Components
-import { getProjectViewComponent } from "../components/ProjectView.js";
-import ContactView from "../components/ContactView.js";
+import ProjectView from "../components/ProjectView.js";
 import HomePage from "../components/HomePage.js";
+import AboutView from "../components/AboutView.js";
 
 class Router {
   constructor() {
@@ -19,9 +19,9 @@ class Router {
         component: new HomePage(),
         title: "Ryan Geyer | Creative Web Developer in Detroit"
       },
-      "/contact": {
-        component: new ContactView(),
-        title: "Ryan Geyer | Contact"
+      "/about": {
+        component: new AboutView(),
+        title: "Ryan Geyer | About Me"
       }
     };
 
@@ -29,7 +29,7 @@ class Router {
       const project = projects[i];
 
       this.registeredPaths[`/projects/${project.name}`] = {
-        component: getProjectViewComponent(project),
+        component: new ProjectView(project),
         title: `Projects | ${project.displayName}`
       };
     }

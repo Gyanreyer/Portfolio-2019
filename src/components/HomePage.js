@@ -1,42 +1,19 @@
+import "./HomePage.scss";
 import projects from "../constants/projects.js";
-import History from "../app/history.js";
 import { smoothScroll } from "../utils/view.js";
 
+import makeRouterLink, { onClickRouterLink } from "./RouterLink.js";
 import { getForwardArrowIcon } from "../constants/svg_icons.js";
 
 class ProjectThumbnail {
   constructor(project) {
     this.project = project;
+    this.projectPath = `/projects/${this.project.name}`;
 
     this.render = this.render.bind(this);
-    this.getProjectLinkElement = this.getProjectLinkElement.bind(this);
     this.getThumbnailImage = this.getThumbnailImage.bind(this);
     this.getProjectTitle = this.getProjectTitle.bind(this);
     this.getTechnologiesList = this.getTechnologiesList.bind(this);
-  }
-
-  getProjectLinkElement() {
-    const projectPath = `/projects/${this.project.name}`;
-
-    const linkElement = document.createElement("a");
-    linkElement.href = projectPath;
-    linkElement.setAttribute("title", `Read more about ${this.project.displayName}`);
-
-    linkElement.addEventListener("click", event => {
-      // Prevent the default browser behavior so that we don't hard load the next url,
-      // and instead manipulate the browser history so that we can keep this an SPA
-      event.preventDefault();
-
-      History.push(
-        projectPath,
-        {
-          project: this.project.name
-        },
-        `Ryan Geyer | ${this.project.displayName}`
-      );
-    });
-
-    return linkElement;
   }
 
   getThumbnailImage() {
@@ -79,27 +56,31 @@ class ProjectThumbnail {
     // Get element for display list that we want to render to
     const projectDisplayList = document.getElementById("projects");
 
-    const thumbnailElement = document.createElement("li");
-    thumbnailElement.className = this.project.name;
+    const thumbnailElementWrapper = document.createElement("li");
+    thumbnailElementWrapper.className = this.project.name;
 
-    const imageWrapperLink = this.getProjectLinkElement();
+    const thumbnailElement = document.createElement("figure");
+
+    const imageWrapperLink = makeRouterLink(this.projectPath);
     imageWrapperLink.className = `thumbnail ${this.project.name} no-underline`;
     imageWrapperLink.appendChild(this.getThumbnailImage());
 
     thumbnailElement.appendChild(imageWrapperLink);
 
-    thumbnailElement.appendChild(this.getProjectTitle());
+    const thumbnailCaption = document.createElement("figcaption");
+
+    thumbnailCaption.appendChild(this.getProjectTitle());
 
     const projectDescription = document.createElement("p");
     projectDescription.className = "description";
     projectDescription.innerText = this.project.shortDesc;
-    thumbnailElement.appendChild(projectDescription);
+    thumbnailCaption.appendChild(projectDescription);
 
     if (this.project.technologies) {
-      thumbnailElement.appendChild(this.getTechnologiesList());
+      thumbnailCaption.appendChild(this.getTechnologiesList());
     }
 
-    const readMoreLink = this.getProjectLinkElement();
+    const readMoreLink = makeRouterLink(this.projectPath);
 
     readMoreLink.className = "text-link";
     readMoreLink.innerText = "Read more";
@@ -111,49 +92,35 @@ class ProjectThumbnail {
       imageWrapperLink.classList.remove("hovered");
     });
 
-    thumbnailElement.appendChild(readMoreLink);
+    thumbnailCaption.appendChild(readMoreLink);
 
-    this.cachedThumbnailElement = thumbnailElement;
+    thumbnailElement.appendChild(thumbnailCaption);
+
+    thumbnailElementWrapper.appendChild(thumbnailElement);
+
+    this.cachedThumbnailElement = thumbnailElementWrapper;
 
     // Append the thumbnail to the project display list
-    projectDisplayList.appendChild(thumbnailElement);
+    projectDisplayList.appendChild(thumbnailElementWrapper);
   }
 }
 
 export default class HomePage {
   constructor() {
-    const onClickScrollToProjects = () =>
+    const onClickScrollToProjects = event => {
+      event.preventDefault();
       smoothScroll(document.getElementById("projects").offsetTop);
+    };
 
     document.querySelectorAll(".project-link").forEach(projectLink => {
       projectLink.addEventListener("click", onClickScrollToProjects);
     });
 
-    document.getElementById("contact-link").addEventListener("click", event => {
-      // Prevent the default browser behavior so that we don't hard load the next url,
-      // and instead manipulate the browser history so that we can keep this an SPA
-      event.preventDefault();
-
-      History.push(
-        "/contact",
-        {
-          page: "contact"
-        },
-        `Ryan Geyer | Contact`
+    document
+      .querySelectorAll(".about-link")
+      .forEach(aboutLink =>
+        aboutLink.addEventListener("click", onClickRouterLink)
       );
-    });
-
-    document.getElementById("about-link").addEventListener("click", event => {
-      event.preventDefault();
-
-      History.push(
-        "/about",
-        {
-          page: "about"
-        },
-        `Ryan Geyer | About Me`
-      );
-    });
 
     this.thumbnailComponents = projects.map(
       project => new ProjectThumbnail(project)

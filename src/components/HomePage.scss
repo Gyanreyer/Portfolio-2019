@@ -1,0 +1,167 @@
+@import '../variables.scss';
+
+nav {
+  position: absolute;
+  right: 10%;
+  top: 2em;
+  text-align: right;
+
+  a {
+    margin-left: 2em;
+  }
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 6em);
+
+  #HeaderContents {
+    text-align: right;
+    margin: auto;
+
+    h1 {
+      font-family: LeagueSpartan;
+      font-size: 7em;
+
+      @media #{$breakpoint-medium} {
+        font-size: 5em;
+      }
+
+      @media #{$breakpoint-mobile} {
+        font-size: 3em;
+      }
+    }
+
+    p {
+      font-size: 1.5em;
+
+      @media #{$breakpoint-mobile} {
+        font-size: 1em;
+      }
+    }
+  }
+}
+
+footer {
+  border-top: solid 1px #707070;
+  margin-top: 4em;
+  text-align: center;
+
+  .links {
+    display: flex;
+    justify-content: center;
+    margin: 1em 0;
+
+    .link-column {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-right: 5em;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      a {
+        text-align: left;
+        font-size: 1.2em;
+        margin-bottom: 0.1em;
+      }
+
+      @media #{$breakpoint-mobile} {
+        margin-right: 2em;
+      }
+    }
+  }
+
+  p {
+    margin: 0.5em 0;
+
+    .copyright {
+      margin-left: 1em;
+
+      @media #{$breakpoint-mobile} {
+        display: block;
+      }
+    }
+  }
+}
+
+#projects {
+  padding: 3em 0 0;
+  margin: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2em;
+
+  li {
+    display: inline-block;
+    text-align: left;
+
+    .thumbnail {
+      display: block;
+      transform-origin: bottom;
+      top: 0;
+      transition: opacity, top;
+      transition-duration: 0.25s;
+      transition-timing-function: ease-in-out;
+
+      img {
+        width: 100%;
+        display: block;
+      }
+
+      &.opening {
+        top: -30%;
+        opacity: 0;
+        transition-duration: 0.2s;
+      }
+
+      &:hover, &.hovered {
+        opacity: 0.85;
+        top: -2%;
+      }
+    }
+
+    h3 {
+      font-weight: bold;
+      font-size: 1.5em;
+      margin: 0.4em 0 0.2em;
+    }
+
+    p {
+      margin: 0 0 0.3em;
+    }
+
+    .description {
+      text-indent: 1em;
+    }
+
+    .text-link {
+      margin-right: 1.85em;
+
+      svg {
+        width: 1.5em;
+        position: absolute;
+        right: -1.65em;
+        transition: right 0.25s;
+      }
+
+      &:hover {
+        svg {
+          right: -1.85em;
+        }
+      }
+    }
+  }
+
+  @media #{$breakpoint-medium} {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media #{$breakpoint-mobile} {
+    grid-template-columns: 1fr;
+  }
+}

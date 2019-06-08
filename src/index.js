@@ -2,7 +2,7 @@
 import Router from "./app/router.js";
 
 // Import CSS files for webpack build
-import "./style.scss";
+import "./app.scss";
 
 const onDocumentLoaded = () => {
   document.querySelector(".loading").classList.remove("loading");
