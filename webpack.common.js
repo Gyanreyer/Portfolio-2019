@@ -1,5 +1,6 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: ["@babel/polyfill", "./src/index.js"],
@@ -29,7 +30,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(otf|mp4)$/,
+        test: /\.(otf|mp4|webm)$/,
         loader: "file-loader?name=[name].[ext]"
       },
       {
@@ -39,6 +40,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: "bundle.css"
     }),

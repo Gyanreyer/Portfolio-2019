@@ -17,17 +17,25 @@ export default class ProjectView {
       this
     );
     this.getProjectViewElement = this.getProjectViewElement.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
     this.render = this.render.bind(this);
   }
 
   getVideoElement() {
     this.video = document.createElement("video");
     this.video.id = "project-video";
-    this.video.setAttribute("src", this.project.video);
     this.video.setAttribute("poster", this.project.image.src);
     this.video.setAttribute("autoplay", true);
     this.video.setAttribute("muted", true);
     this.video.setAttribute("loop", true);
+
+    this.project.videos.forEach(video => {
+      const source = document.createElement("source");
+      source.src = video.src;
+      source.type = video.type;
+
+      this.video.appendChild(source);
+    });
 
     return this.video;
   }
@@ -154,7 +162,7 @@ export default class ProjectView {
     if (history.isInitialPage) {
       this.projectViewElement.classList.add("visible");
       // Hide the primary contents hidden under the view so they don't interfere with tabbing focus
-      document.body.querySelector("main").style.display = "none";
+      document.body.querySelector("main").style.visibility = "hidden";
     } else {
       // Delay applying the visibility styling so we can trigger a CSS transition
       // We have to use this weird requestAnimationFrame + setTimeout combo as it seems to be the most effective cross-browser
@@ -167,7 +175,7 @@ export default class ProjectView {
           this.projectViewElement.classList.add("visible");
 
           setTimeout(() => {
-            document.body.querySelector("main").style.display = "none";
+            document.body.querySelector("main").style.visibility = "hidden";
           }, 300);
         });
       });
@@ -179,6 +187,8 @@ export default class ProjectView {
   onKeyDown(event) {
     if (event.key === "Escape") {
       history.push("/");
+
+      document.querySelector(`.thumbnail.${this.project.name}`).focus();
     }
   }
 
@@ -199,7 +209,7 @@ export default class ProjectView {
     document.documentElement.style.backgroundColor = null;
 
     this.projectViewElement.classList.remove("visible");
-    document.body.querySelector("main").style.display = "block";
+    document.body.querySelector("main").style.visibility = "visible";
 
     window.removeEventListener("keydown", this.onKeyDown);
 
