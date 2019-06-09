@@ -51,7 +51,7 @@ footer {
   .links {
     display: flex;
     justify-content: center;
-    margin: 1em 0;
+    margin: 1.5em 0 1em;
 
     .link-column {
       display: flex;
@@ -103,8 +103,7 @@ footer {
     .thumbnail {
       display: block;
       transform-origin: bottom;
-      top: 0;
-      transition: opacity, top;
+      transition: opacity, transform;
       transition-duration: 0.25s;
       transition-timing-function: ease-in-out;
 
@@ -113,15 +112,9 @@ footer {
         display: block;
       }
 
-      &.opening {
-        top: -30%;
-        opacity: 0;
-        transition-duration: 0.2s;
-      }
-
       &:hover, &.hovered {
         opacity: 0.85;
-        top: -2%;
+        transform: translateY(-3%);
       }
     }
 

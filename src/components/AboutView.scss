@@ -4,15 +4,122 @@
   background-color: $baseLightColor;
 
   .contents-wrapper {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
+    display: flex;
+    // Need to specify this so that images won't stretch to their natural height
+    align-items: flex-start;
 
-    h1 {
-      font-size: 3em;
+    .text-contents {
+      margin-right: 4em;
+
+      @media #{$breakpoint-medium} {
+        margin-right: 0;
+      }
+
+      h1 {
+        font-family: LeagueSpartan;
+        font-size: 4em;
+
+        .waving-emoji {
+          margin-left: 0.2em;
+          display: inline-block;
+          opacity: 0;
+          transform: translateX(50%) rotate(0.7rad);
+          transition: transform, opacity;
+          transition-duration: 0.3s;
+          transition-delay: 0.1s;
+          transition-timing-function: ease-out;
+        }
+
+        @media #{$breakpoint-medium} {
+          font-size: 3em;
+        }
+    
+        @media #{$breakpoint-mobile} {
+          font-size: 2.5em;
+        }
+      }
+
+      p {
+        font-size: 1.1em;
+        line-height: 1.2;
+        margin: 0.75em 0;
+
+        &.about-links {
+          margin: 1.5em 0;
+          line-height: 1.5;
+
+          a {
+            display: inline-block;
+            margin-right: 1em;
+          }
+        }
+      }
+
+      .fun-facts-title {
+        font-weight: $fontWeightSemiBold;
+        position: relative;
+        padding-bottom: 0.75em;
+        margin: 3em 0 0.75em;
+
+        @media #{$breakpoint-medium} {
+          margin-top: 0;
+        }
+
+        &::after {
+          content: " ";
+          height: 1px;
+          background-color: $baseDarkColor;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+        }
+      }
     }
 
-    img {
-      width: 100%;
+    .my-image {
+      width: 30%;
+      margin-top: 1.2em;
+
+      @media #{$breakpoint-medium} {
+        display: none;
+      }
     }
+
+    .loading-dot {
+      margin-right: 0.1em;
+      display: inline-block;
+      animation: dotLoadingAnimation 1.5s ease-in-out infinite;
+
+      @for $i from 1 to 4 {
+        &:nth-child(#{$i}) { animation-delay: $i * 0.15s; }
+      }
+    }
+
+    .top-track {
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+
+      &.loaded {
+        opacity: 1;
+      }
+    }
+  }
+
+  &.visible .waving-emoji {
+    transform: rotate(0) !important;
+    opacity: 1 !important;
+  }
+}
+
+@keyframes dotLoadingAnimation {
+  0%, 40%, 100%  {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  15% {
+    opacity: 0.7;
+    transform: translateY(-10%);
   }
 }

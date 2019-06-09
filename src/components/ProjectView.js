@@ -153,6 +153,8 @@ export default class ProjectView {
 
     if (history.isInitialPage) {
       this.projectViewElement.classList.add("visible");
+      // Hide the primary contents hidden under the view so they don't interfere with tabbing focus
+      document.body.querySelector("main").style.display = "none";
     } else {
       // Delay applying the visibility styling so we can trigger a CSS transition
       // We have to use this weird requestAnimationFrame + setTimeout combo as it seems to be the most effective cross-browser
@@ -163,6 +165,10 @@ export default class ProjectView {
 
         setTimeout(() => {
           this.projectViewElement.classList.add("visible");
+
+          setTimeout(() => {
+            document.body.querySelector("main").style.display = "none";
+          }, 300);
         });
       });
     }
@@ -170,43 +176,37 @@ export default class ProjectView {
     return this.projectViewElement;
   }
 
+  onKeyDown(event) {
+    if (event.key === "Escape") {
+      history.push("/");
+    }
+  }
+
   render() {
     lockScrolling();
 
     document.body.appendChild(this.getProjectViewElement());
 
-    const openingProjectThumbnail = document.querySelector(
-      `.thumbnail.${this.project.name}`
-    );
-
-    if (openingProjectThumbnail) {
-      openingProjectThumbnail.classList.add("opening");
-    }
-
     document.documentElement.style.backgroundColor = this.project.primaryColor;
+
+    // Add event listener to close the project view when escape is pressed
+    window.addEventListener("keydown", this.onKeyDown);
   }
 
   unmount() {
     unlockScrolling();
 
-    const openingProjectThumbnail = document.querySelector(
-      `.thumbnail.${this.project.name}.opening`
-    );
-
-    if (openingProjectThumbnail) {
-      openingProjectThumbnail.classList.remove("opening");
-    }
-
     document.documentElement.style.backgroundColor = null;
 
-    if (this.projectViewElement) {
-      this.projectViewElement.classList.remove("visible");
+    this.projectViewElement.classList.remove("visible");
+    document.body.querySelector("main").style.display = "block";
 
-      // Remove the project view element from the DOM
-      setTimeout(() => {
-        this.projectViewElement.remove();
-        this.projectViewElement = null;
-      }, 300);
-    }
+    window.removeEventListener("keydown", this.onKeyDown);
+
+    // Remove the project view element from the DOM
+    setTimeout(() => {
+      this.projectViewElement.remove();
+      this.projectViewElement = null;
+    }, 300);
   }
 }

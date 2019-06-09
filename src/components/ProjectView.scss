@@ -2,10 +2,9 @@
 
 #project-view {
   padding-right: 50%;
-    
-  @media #{$breakpoint-medium} {
-    padding-right: 30%;
 
+  @media #{$breakpoint-large} {
+    padding-right: 30%;
   }
 
   @media #{$breakpoint-mobile} {
@@ -15,18 +14,24 @@
   h1 {
     font-family: LeagueSpartan;
     font-size: 4em;
-    margin: 0.7em 0 0.1em;
+    margin: 0 0 0.1em;
+    display: inline-block;
+
+    @media #{$breakpoint-medium} {
+      font-size: 3em;
+    }
+
+    @media #{$breakpoint-mobile} {
+      font-size: 2.5em;
+    }
   }
 
   video {
     width: 100%;
     margin-bottom: 1em;
-    transition-delay: 0.05s;
   }
 
   .project-links {
-    transition-delay: 0.15s;
-
     a{
       font-size: 1.1em;
       line-height: 1.3;
@@ -59,10 +64,5 @@
 
   .description {
     margin: 1em 0 2em;
-    transition-delay: 0.2s;
-  }
-
-  .technologies-list {
-    transition-delay: 0.25s;
   }
 }

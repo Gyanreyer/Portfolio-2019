@@ -20,6 +20,7 @@ class ProjectThumbnail {
     const thumbnailImage = new Image();
     thumbnailImage.src = this.project.image.src;
     thumbnailImage.srcset = this.project.image.srcSet;
+    thumbnailImage.sizes = "(max-width: 600px) 80vw, (max-width: 900px) 39vw, 26vw"
     thumbnailImage.alt = `${this.project.displayName} thumbnail`;
 
     return thumbnailImage;
