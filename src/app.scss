@@ -88,15 +88,17 @@ a {
     transition: width 0.25s ease-in-out;
   }
 
-  &:hover {
-    opacity: 0.75;
+  @media #{$breakpoint-medium-up} {
+    &:hover {
+      opacity: 0.75;
 
-    &::after {
-      // When hovered, make line justify to the left so that as it grows, it appears to be
-      // sliding in from the left
-      left: 0;
-      right: auto;
-      width: 100%;
+      &::after {
+        // When hovered, make line justify to the left so that as it grows, it appears to be
+        // sliding in from the left
+        left: 0;
+        right: auto;
+        width: 100%;
+      }
     }
   }
 
@@ -131,9 +133,11 @@ main {
       transition: left 0.25s, opacity 0.25s;
     }
 
-    &:hover svg {
-      left: -1.7em;
-      opacity: 0.75;
+    @media #{$breakpoint-medium-up} {
+      &:hover svg {
+        left: -1.7em;
+        opacity: 0.75;
+      }
     }
   }
 }

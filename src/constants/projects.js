@@ -10,14 +10,14 @@ export default [
     primaryLink: "http://waymark.com",
     image: require("../resources/thumbnails/waymark.png"),
     videos: [
-      // {
-      //   src: require("../resources/videos/waymark.webm"),
-      //   type: "video/webm"
-      // },
-      // {
-      //   src: require("../resources/videos/waymark.mp4"),
-      //   type: "video/mp4"
-      // }
+      {
+        src: require("../resources/videos/waymark.webm"),
+        type: "video/webm"
+      },
+      {
+        src: require("../resources/videos/waymark.mp4"),
+        type: "video/mp4"
+      }
     ],
     primaryColor: "#005ac3",
     textTheme: "light"
@@ -37,14 +37,14 @@ export default [
     githubLink: "https://github.com/Gyanreyer/Painter-2",
     image: require("../resources/thumbnails/painter.jpg"),
     videos: [
-      // {
-      //   src: require("../resources/videos/painter.webm"),
-      //   type: "video/webm"
-      // },
-      // {
-      //   src: require("../resources/videos/painter.mp4"),
-      //   type: "video/mp4"
-      // }
+      {
+        src: require("../resources/videos/painter.webm"),
+        type: "video/webm"
+      },
+      {
+        src: require("../resources/videos/painter.mp4"),
+        type: "video/mp4"
+      }
     ],
     primaryColor: "#3bb583",
     textTheme: "light"

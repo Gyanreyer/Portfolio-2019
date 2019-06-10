@@ -127,7 +127,7 @@ export default class ProjectView {
   }
 
   getProjectViewElement() {
-    if(this.projectViewElement){
+    if (this.projectViewElement) {
       clearTimeout(this.removeElementTimeout);
       return this.projectViewElement;
     }
@@ -168,7 +168,9 @@ export default class ProjectView {
     if (history.isInitialPage) {
       this.projectViewElement.classList.add("visible");
       // Hide the primary contents hidden under the view so they don't interfere with tabbing focus
-      document.body.querySelector("main").style.visibility = "hidden";
+      const mainElement = document.body.querySelector("main");
+      mainElement.setAttribute("aria-hidden", true);
+      mainElement.style.visibility = "hidden";
     } else {
       // Delay applying the visibility styling so we can trigger a CSS transition
       // We have to use this weird requestAnimationFrame + setTimeout combo as it seems to be the most effective cross-browser
@@ -181,7 +183,9 @@ export default class ProjectView {
           this.projectViewElement.classList.add("visible");
 
           setTimeout(() => {
-            document.body.querySelector("main").style.visibility = "hidden";
+            const mainElement = document.body.querySelector("main");
+            mainElement.setAttribute("aria-hidden", true);
+            mainElement.style.visibility = "hidden";
           }, 300);
         });
       });
@@ -219,7 +223,9 @@ export default class ProjectView {
     unlockScrolling();
 
     document.documentElement.style.backgroundColor = null;
-    document.body.querySelector("main").style.visibility = "visible";
+    const mainElement = document.body.querySelector("main");
+    mainElement.setAttribute("aria-hidden", false);
+    mainElement.style.visibility = "visible";
 
     window.removeEventListener("keydown", this.onKeyDown);
 

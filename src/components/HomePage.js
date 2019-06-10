@@ -15,6 +15,9 @@ class ProjectThumbnail {
     this.getThumbnailVideoElement = this.getThumbnailVideoElement.bind(this);
     this.getProjectTitle = this.getProjectTitle.bind(this);
     this.getTechnologiesList = this.getTechnologiesList.bind(this);
+    this.startPlayingVideo = this.startPlayingVideo.bind(this);
+    this.hideVideo = this.hideVideo.bind(this);
+    this.onScroll = this.onScroll.bind(this);
   }
 
   getThumbnailImage() {
@@ -71,6 +74,42 @@ class ProjectThumbnail {
     return technologiesUsedDescription;
   }
 
+  // Start playing the preview video and fade it in
+  startPlayingVideo() {
+    // If the preview video doesn't exist or is already being shown, don't do anything
+    if (!this.video || this.video.classList.contains("playing-preview")) return;
+
+    // Kick off playing the video and fade it in once it starts
+    this.video.play().then(() => this.video.classList.add("playing-preview"));
+  }
+
+  // Hide the video preview by fading it out
+  hideVideo() {
+    this.video.classList.remove("playing-preview");
+  }
+
+  onScroll() {
+    // Only check scroll events if we have a video element and we're on mobile
+    if (!this.video || window.innerWidth > 600) return;
+
+    // Use a timeout to debounce scroll events so that we'll only start
+    // playing after the user has stayed scrolled over the video for .5 seconds
+    clearTimeout(this.scrollTimeout);
+    this.scrollTimeout = setTimeout(() => {
+      const videoElementBoundingRect = this.video.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      if (
+        videoElementBoundingRect.top > 0 &&
+        videoElementBoundingRect.bottom < windowHeight * 0.7
+      ) {
+        this.startPlayingVideo();
+      } else {
+        this.hideVideo();
+      }
+    }, 500);
+  }
+
   render() {
     // If the thumbnail has already been rendered, we don't need to do anything again
     if (this.cachedThumbnailElement) return;
@@ -90,9 +129,11 @@ class ProjectThumbnail {
     imageWrapperLink.appendChild(this.getThumbnailVideoElement());
 
     imageWrapperLink.addEventListener("mouseenter", () => {
-      this.video.play();
+      this.startPlayingVideo();
     });
-
+    imageWrapperLink.addEventListener("mouseleave", () => {
+      this.hideVideo();
+    });
 
     thumbnailElement.appendChild(imageWrapperLink);
 
@@ -117,11 +158,10 @@ class ProjectThumbnail {
     readMoreLink.tabIndex = -1;
     readMoreLink.appendChild(getForwardArrowIcon());
     readMoreLink.addEventListener("mouseenter", () => {
-      imageWrapperLink.classList.add("hovered");
-      this.video.play();
+      this.startPlayingVideo();
     });
     readMoreLink.addEventListener("mouseleave", () => {
-      imageWrapperLink.classList.remove("hovered");
+      this.hideVideo();
     });
 
     thumbnailCaption.appendChild(readMoreLink);
@@ -134,6 +174,12 @@ class ProjectThumbnail {
 
     // Append the thumbnail to the project display list
     projectDisplayList.appendChild(thumbnailElementWrapper);
+
+    window.addEventListener("scroll", this.onScroll, {
+      passive: true
+    });
+
+    this.onScroll();
   }
 }
 
