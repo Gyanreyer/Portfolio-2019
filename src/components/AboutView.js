@@ -5,7 +5,7 @@ import pictureOfMe from "../resources/images/ryan.jpg";
 import history from "../app/history.js";
 
 const contentParagraphs = [
-  "I'm Ryan, pleased to meet you. I'm a web developer with a passion for making things that look and feel good.",
+  "I'm Ryan, pleased to meet you. I'm a web developer in Detroit with a passion for making things that look and feel good.",
   "I studied Game Design and Development at RIT and I'm a member of Hacker Fellows, a fellowship program which matches talented folks with Michigan-based tech startups.",
   "I'm currently working as a full-stack software engineer at Waymark. It's pretty cool, you should check it out."
 ];
@@ -78,6 +78,11 @@ export default class AboutView {
   }
 
   getAboutViewElement() {
+    if(this.aboutViewElement){
+      clearTimeout(this.removeElementTimeout);
+      return this.aboutViewElement;
+    }
+
     this.aboutViewElement = document.createElement("article");
     this.aboutViewElement.classList.add("view");
     this.aboutViewElement.id = "about-view";
@@ -161,7 +166,7 @@ export default class AboutView {
 
     if (history.isInitialPage) {
       this.aboutViewElement.classList.add("visible");
-      document.body.querySelector("main").style.display = "none";
+      document.body.querySelector("main").style.visibility = "hidden";
     } else {
       // Delay applying the visibility styling so we can trigger a CSS transition
       // We have to use this weird requestAnimationFrame + setTimeout combo as it seems to be the most effective cross-browser
@@ -174,7 +179,7 @@ export default class AboutView {
           this.aboutViewElement.classList.add("visible");
 
           setTimeout(() => {
-            document.body.querySelector("main").style.display = "none";
+            document.body.querySelector("main").style.visibility = "hidden";
           }, 300);
         });
       });
@@ -186,11 +191,19 @@ export default class AboutView {
   onKeyDown(event) {
     if (event.key === "Escape") {
       history.push("/");
+
+      if (this.lastFocusedElement) {
+        this.lastFocusedElement.focus();
+      }
     }
   }
 
   render() {
     lockScrolling();
+
+    if (document.activeElement) {
+      this.lastFocusedElement = document.activeElement;
+    }
 
     document.body.appendChild(this.getAboutViewElement());
 
@@ -201,14 +214,19 @@ export default class AboutView {
   unmount() {
     unlockScrolling();
 
-    this.aboutViewElement.classList.remove("visible");
-    document.body.querySelector("main").style.display = "block";
+    document.body.querySelector("main").style.visibility = "visible";
 
     window.removeEventListener("keydown", this.onKeyDown);
 
-    setTimeout(() => {
-      this.aboutViewElement.remove();
-      this.aboutViewElement = null;
-    }, 300);
+    if (this.aboutViewElement) {
+      this.aboutViewElement.classList.remove("visible");
+
+      // Remove the element on a delay after its hide transition is done
+      clearTimeout(this.removeElementTimeout);
+      this.removeElementTimeout = setTimeout(() => {
+        this.aboutViewElement.remove();
+        this.aboutViewElement = null;
+      }, 300);
+    }
   }
 }

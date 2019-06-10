@@ -12,6 +12,7 @@ class ProjectThumbnail {
 
     this.render = this.render.bind(this);
     this.getThumbnailImage = this.getThumbnailImage.bind(this);
+    this.getThumbnailVideoElement = this.getThumbnailVideoElement.bind(this);
     this.getProjectTitle = this.getProjectTitle.bind(this);
     this.getTechnologiesList = this.getTechnologiesList.bind(this);
   }
@@ -20,10 +21,30 @@ class ProjectThumbnail {
     const thumbnailImage = new Image();
     thumbnailImage.src = this.project.image.src;
     thumbnailImage.srcset = this.project.image.srcSet;
-    thumbnailImage.sizes = "(max-width: 600px) 80vw, (max-width: 900px) 39vw, 26vw"
+    thumbnailImage.sizes =
+      "(max-width: 600px) 80vw, (max-width: 900px) 39vw, 26vw";
     thumbnailImage.alt = `${this.project.displayName} thumbnail`;
 
     return thumbnailImage;
+  }
+
+  getThumbnailVideoElement() {
+    this.video = document.createElement("video");
+    this.video.className = "thumbnail-video";
+    this.video.setAttribute("preload", "none");
+    this.video.setAttribute("muted", true);
+    this.video.setAttribute("loop", true);
+    this.video.setAttribute("playsinline", true);
+
+    this.project.videos.forEach(video => {
+      const source = document.createElement("source");
+      source.src = video.src;
+      source.type = video.type;
+
+      this.video.appendChild(source);
+    });
+
+    return this.video;
   }
 
   getProjectTitle() {
@@ -64,7 +85,14 @@ class ProjectThumbnail {
 
     const imageWrapperLink = makeRouterLink(this.projectPath);
     imageWrapperLink.className = `thumbnail ${this.project.name} no-underline`;
+    imageWrapperLink.title = `Read more about ${this.project.displayName}`;
     imageWrapperLink.appendChild(this.getThumbnailImage());
+    imageWrapperLink.appendChild(this.getThumbnailVideoElement());
+
+    imageWrapperLink.addEventListener("mouseenter", () => {
+      this.video.play();
+    });
+
 
     thumbnailElement.appendChild(imageWrapperLink);
 
@@ -85,9 +113,12 @@ class ProjectThumbnail {
 
     readMoreLink.className = "text-link";
     readMoreLink.innerText = "Read more";
+    readMoreLink.title = `Read more about ${this.project.displayName}`;
+    readMoreLink.tabIndex = -1;
     readMoreLink.appendChild(getForwardArrowIcon());
     readMoreLink.addEventListener("mouseenter", () => {
       imageWrapperLink.classList.add("hovered");
+      this.video.play();
     });
     readMoreLink.addEventListener("mouseleave", () => {
       imageWrapperLink.classList.remove("hovered");

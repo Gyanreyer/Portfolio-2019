@@ -19,8 +19,8 @@ export default [
       //   type: "video/mp4"
       // }
     ],
-    primaryColor: "#CCC",
-    textTheme: "dark"
+    primaryColor: "#005ac3",
+    textTheme: "light"
   },
   {
     name: "painter",
@@ -46,7 +46,7 @@ export default [
       //   type: "video/mp4"
       // }
     ],
-    primaryColor: "#45a179",
+    primaryColor: "#3bb583",
     textTheme: "light"
   },
   {
@@ -102,7 +102,7 @@ export default [
         type: "video/mp4"
       }
     ],
-    primaryColor: "#fff",
+    primaryColor: "#469e46",
     textTheme: "light"
   },
   {
@@ -135,7 +135,7 @@ export default [
         type: "video/mp4"
       }
     ],
-    primaryColor: "#fff",
+    primaryColor: "#1c682a",
     textTheme: "light"
   },
   {
@@ -165,7 +165,7 @@ export default [
         type: "video/mp4"
       }
     ],
-    primaryColor: "#b65483",
+    primaryColor: "#923e75",
     textTheme: "light"
   },
   {
@@ -194,7 +194,9 @@ export default [
         src: require("../resources/videos/whitehat.mp4"),
         type: "video/mp4"
       }
-    ]
+    ],
+    primaryColor: "#621E7D",
+    textTheme: "light"
   },
   {
     name: "soundwaves",
@@ -216,7 +218,9 @@ export default [
         src: require("../resources/videos/soundwaves.mp4"),
         type: "video/mp4"
       }
-    ]
+    ],
+    primaryColor: "#d09a50",
+    textTheme: "light"
   },
   {
     name: "subtractus",
@@ -244,7 +248,9 @@ export default [
         src: require("../resources/videos/subtractus.mp4"),
         type: "video/mp4"
       }
-    ]
+    ],
+    primaryColor: "#da860e",
+    textTheme: "light"
   },
   {
     name: "reef",
@@ -272,7 +278,9 @@ export default [
         src: require("../resources/videos/reef.mp4"),
         type: "video/mp4"
       }
-    ]
+    ],
+    primaryColor: "#1579A2",
+    textTheme: "light"
   },
   {
     name: "asteroids",
@@ -294,7 +302,9 @@ export default [
         src: require("../resources/videos/asteroids.mp4"),
         type: "video/mp4"
       }
-    ]
+    ],
+    primaryColor: "#c46741",
+    textTheme: "light"
   },
   {
     name: "westernquadrant",
@@ -316,6 +326,8 @@ export default [
         src: require("../resources/videos/westernquadrant.mp4"),
         type: "video/mp4"
       }
-    ]
+    ],
+    primaryColor: "#940435",
+    textTheme: "light"
   }
 ];

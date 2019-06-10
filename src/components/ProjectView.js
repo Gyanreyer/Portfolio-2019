@@ -28,6 +28,7 @@ export default class ProjectView {
     this.video.setAttribute("autoplay", true);
     this.video.setAttribute("muted", true);
     this.video.setAttribute("loop", true);
+    this.video.setAttribute("playsinline", true);
 
     this.project.videos.forEach(video => {
       const source = document.createElement("source");
@@ -126,6 +127,11 @@ export default class ProjectView {
   }
 
   getProjectViewElement() {
+    if(this.projectViewElement){
+      clearTimeout(this.removeElementTimeout);
+      return this.projectViewElement;
+    }
+
     this.projectViewElement = document.createElement("article");
     this.projectViewElement.id = "project-view";
     this.projectViewElement.classList.add("view");
@@ -188,12 +194,18 @@ export default class ProjectView {
     if (event.key === "Escape") {
       history.push("/");
 
-      document.querySelector(`.thumbnail.${this.project.name}`).focus();
+      if (this.lastFocusedElement) {
+        this.lastFocusedElement.focus();
+      }
     }
   }
 
   render() {
     lockScrolling();
+
+    if (document.activeElement) {
+      this.lastFocusedElement = document.activeElement;
+    }
 
     document.body.appendChild(this.getProjectViewElement());
 
@@ -207,16 +219,18 @@ export default class ProjectView {
     unlockScrolling();
 
     document.documentElement.style.backgroundColor = null;
-
-    this.projectViewElement.classList.remove("visible");
     document.body.querySelector("main").style.visibility = "visible";
 
     window.removeEventListener("keydown", this.onKeyDown);
 
-    // Remove the project view element from the DOM
-    setTimeout(() => {
-      this.projectViewElement.remove();
-      this.projectViewElement = null;
-    }, 300);
+    if (this.projectViewElement) {
+      this.projectViewElement.classList.remove("visible");
+      // Remove the project view element from the DOM
+      clearTimeout(this.removeElementTimeout);
+      this.removeElementTimeout = setTimeout(() => {
+        this.projectViewElement.remove();
+        this.projectViewElement = null;
+      }, 300);
+    }
   }
 }
