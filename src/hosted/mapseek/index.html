@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MapSeek</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+
+        <base href="/mapseek/"/>
+
+        <link rel="icon" type="image/png" sizes="32x32" href="Assets/Favicon/favicon-32x32.png">
+        
+        <link rel="stylesheet" type="text/css" href="style.css">
+        
+        <script src="Scripts/ISOtoCountry.js"></script><!--Script to convert country codes to usable strings, source: https://gist.github.com/maephisto/9228207-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="Scripts/main.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByp6utu4OsT1ehx2p0zsweyrunILP9BNs&libraries=geometry&callback=initMap" async defer></script>
+    </head>
+    
+    <body>
+        
+        <div id="loadingScreen">
+            <img src="Assets/Logo.png" alt="MapSeek"/>
+            <p>Loading...</p>
+        </div>
+        
+        <div id="roundEndScreen">
+            <div class='pageHead'>
+                <h1>Round Over!</h1>
+                <div id="results">
+                    <p id="guessPoints"></p>
+                    <p id="guessDist"></p>
+                </div>
+            </div>
+            
+            <div id="continueButton">Continue</div>  
+        </div>
+        
+        <div id="mainPage">
+            <div class="pageHead" id="mainPageHead"></div>
+            <div id="pageContents"></div>
+            <div id="mapContainer">
+                <div id="mobilePopupButton"><img src="Assets/menuArrow.png" alt="Arrow" id="mapArrow"></div>
+                
+                <div id="topLeft" class="resizeArea"></div>
+                <div id="bottomLeft" class="resizeArea"></div>
+                <div id="topRight" class="resizeArea"></div>
+                <div id="bottomRight" class="resizeArea"></div>        
+
+                <div id="moveBar"></div>
+                <div id="mapContents">
+                    <div id="scoreBoard">
+                        <p id="roundCount">Round: 1/5</p>
+                        <p id="currentScore">Score: 0</p>  
+                    </div>
+                    <div id="map"></div>
+                    <div id="submitButton">Submit</div>
+                </div>
+            </div>  
+        </div>
+        
+              
+        
+        <div id="gameEndScreen">
+            <div class='pageHead'>
+                <h1>Game Complete!</h1>
+            </div>
+            <div id="scoreResults">
+                <span id="finalScore"></span>
+                <span id="highScore"></span>
+                <div id="finalScoreBar"><div id="scoreBarFill"></div></div>
+                
+            </div>
+            <div id="finalResultsDropdown"> 
+                <div id="dropdownButton"><img src="Assets/menuArrow.png" alt="Drop down arrow" id="dropdownArrow" class="noSelect"></div>
+                <div id="dropdownContents">
+                </div>
+            </div>
+                
+            <div id="replayButton">Play Again</div>
+        </div>
+        
+    </body>
+
+</html>

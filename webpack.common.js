@@ -1,6 +1,7 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: ["@babel/polyfill", "./src/index.js"],
@@ -41,6 +42,17 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new CopyPlugin([
+      {
+        from: "./src/hosted"
+      },
+      {
+        from: "./src/robots.txt"
+      },
+      {
+        from: "./src/sitemap.xml"
+      }
+    ]),
     new MiniCssExtractPlugin({
       filename: "bundle.css"
     }),

@@ -33,7 +33,7 @@ export default [
       "GLSL",
       { text: "Pixi.js", url: "https://github.com/pixijs/pixi.js" }
     ],
-    primaryLink: "http://rgeyer.com/Painter",
+    primaryLink: "/painter",
     githubLink: "https://github.com/Gyanreyer/Painter-2",
     image: require("../resources/thumbnails/painter.jpg"),
     videos: [
@@ -122,7 +122,7 @@ export default [
       "HTML",
       "CSS"
     ],
-    primaryLink: "/MapSeek",
+    primaryLink: "/mapseek",
     githubLink: "https://github.com/Gyanreyer/MapSeek",
     image: require("../resources/thumbnails/mapseek.jpg"),
     videos: [
@@ -206,7 +206,7 @@ export default [
     desc:
       "A web app that visualizes frequency and wavelength data from songs using the Canvas and Web Audio APIs. This was made as a class project for Rich Media Web App Development I, Fall 2016.",
     technologies: ["JavaScript", "HTML", "CSS"],
-    primaryLink: "/Soundwaves",
+    primaryLink: "/soundwaves",
     githubLink: "https://github.com/Gyanreyer/Soundwaves",
     image: require("../resources/thumbnails/soundwaves.jpg"),
     videos: [
