@@ -14,7 +14,7 @@
     ],
     "headers": [
       {
-        "source": "**/*.@(jpg|jpeg|gif|png|mp4|webm)",
+        "source": "**/*.@(jpg|jpeg|gif|png|mp4|webm|otf)",
         "headers": [ {
           "key": "Cache-Control",
           "value": "max-age=31557600"

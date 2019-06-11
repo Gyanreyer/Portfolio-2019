@@ -3,9 +3,9 @@ export default [
     name: "waymark",
     displayName: "Waymark",
     shortDesc:
-      "A Detroit-based art and technology startup that empowers anyone to make exceptional video ads in seconds.",
+      "A Detroit-based art and technology company that empowers anyone to make exceptional video ads in seconds.",
     desc:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Waymark is a tech startup with a mission to empower businesses to spread their messages through beautiful templated video ads that can be made right in the browser, all in a matter of minutes. Our technology allows users to pick a pre-made video template which is guaranteed to look great and grab people's attention, and then edit their video to include their own images, text, colors, and more in real time. I have been working at Waymark as a full-stack software engineer since July 2018 and loving every minute of it.",
     technologies: ["JavaScript", "React", "CSS", "Python", "Django"],
     primaryLink: "http://waymark.com",
     image: require("../resources/thumbnails/waymark.png"),
@@ -22,27 +22,56 @@ export default [
     primaryColor: "#005ac3",
     textTheme: "light"
   },
+  // {
+  //   name: "painter",
+  //   displayName: "Painter",
+  //   shortDesc:
+  //     "An experimental web app that procedurally generates art using PixiJS.",
+  //   desc:
+  //     "A web app that procedurally generates paintings, pixel by pixel. This project started as a fun one-day experiment in trying to randomly generate art using the Canvas API. However, because of the nature of canvas and how it handles pixel-by-pixel manipulation,it ran far slower than I wanted, leading me to do a great deal of research on optimization techniques and ultimately porting it to WebGL using the Three.js library. This was my first experience with WebGL and was an excellent learning experience, I plan to use it more in future projects.",
+  //   technologies: [
+  //     "JavaScript",
+  //     "GLSL",
+  //     { text: "Pixi.js", url: "https://github.com/pixijs/pixi.js" }
+  //   ],
+  //   primaryLink: "/painter",
+  //   githubLink: "https://github.com/Gyanreyer/Painter-2",
+  //   image: require("../resources/thumbnails/painter.jpg"),
+  //   videos: [
+  //     {
+  //       src: require("../resources/videos/painter.webm"),
+  //       type: "video/webm"
+  //     },
+  //     {
+  //       src: require("../resources/videos/painter.mp4"),
+  //       type: "video/mp4"
+  //     }
+  //   ],
+  //   primaryColor: "#3bb583",
+  //   textTheme: "light"
+  // },
   {
     name: "painter",
     displayName: "Painter",
     shortDesc:
-      "An experimental web app that procedurally generates art using PixiJS.",
-    desc: "A painting application",
+      "An experimental web app that procedurally generates watercolor-style art using WebGL.",
+    desc:
+      "A web app that procedurally generates paintings, pixel by pixel. This project started as a fun one-day experiment in trying to randomly generate art using the Canvas API. However, because of the nature of canvas and how it handles pixel-by-pixel manipulation,it ran far slower than I wanted, leading me to do a great deal of research on optimization techniques and ultimately porting it to WebGL using the Three.js library. I am currently actively working on a remake of this with significantly better performance using Pixi.js. Stay tuned!",
     technologies: [
       "JavaScript",
       "GLSL",
-      { text: "Pixi.js", url: "https://github.com/pixijs/pixi.js" }
+      { text: "Three.js", url: "https://threejs.org/" }
     ],
     primaryLink: "/painter",
-    githubLink: "https://github.com/Gyanreyer/Painter-2",
+    githubLink: "https://github.com/Gyanreyer/Painter",
     image: require("../resources/thumbnails/painter.jpg"),
     videos: [
       {
-        src: require("../resources/videos/painter.webm"),
+        src: require("../resources/videos/painter_legacy.webm"),
         type: "video/webm"
       },
       {
-        src: require("../resources/videos/painter.mp4"),
+        src: require("../resources/videos/painter_legacy.mp4"),
         type: "video/mp4"
       }
     ],

@@ -2,5 +2,6 @@ User-agent: *
 Sitemap: https://geyer.dev/sitemap.xml
 Disallow: /Ryan_Geyer_Resume.pdf
 Disallow: /painter
+Disallow: /painter_legacy
 Disallow: /mapseek
 Disallow: /soundwaves
