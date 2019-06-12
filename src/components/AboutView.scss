@@ -10,6 +10,9 @@
 
     .text-contents {
       margin-right: 4em;
+      // Disable flex-shrink to avoid an awkward content width
+      // jump when the image on the right finishes loading
+      flex: 1 0;
 
       @media #{$breakpoint-medium} {
         margin-right: 0;
@@ -80,6 +83,16 @@
     .my-image {
       width: 30%;
       margin-top: 1.2em;
+      transition: opacity, transform;
+      transition-duration: 0.3s;
+      transition-timing-function: ease-in-out;
+
+      // Hide image while it's loading - it will fade in/slide up
+      // when it's done
+      &.loading {
+        opacity: 0;
+        transform: translateY(3%);
+      }
 
       @media #{$breakpoint-medium} {
         display: none;

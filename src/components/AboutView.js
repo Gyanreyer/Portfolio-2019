@@ -162,6 +162,15 @@ export default class AboutView {
 
     contentsWrapper.appendChild(myImage);
 
+    // If the image isn't loaded, add a class to hide it
+    // which will be removed once it's done
+    if (!myImage.complete) {
+      myImage.classList.add("loading");
+      myImage.addEventListener("load", () =>
+        myImage.classList.remove("loading")
+      );
+    }
+
     this.aboutViewElement.appendChild(contentsWrapper);
 
     if (history.isInitialPage) {
