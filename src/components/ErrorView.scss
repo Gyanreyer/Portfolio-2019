@@ -1,0 +1,13 @@
+@import '../variables.scss';
+
+#error-view {
+  background-color: $baseLightColor;
+  
+  h1{
+    font-size: 2em;
+  }
+
+  .subtitle {
+    margin: 0.2em 0 0.7em;
+  }
+}

@@ -1,8 +1,6 @@
 import "./AboutView.scss";
-import { lockScrolling, unlockScrolling } from "../utils/view.js";
-import { makeBackButton } from "./RouterLink.js";
 import pictureOfMe from "../resources/images/ryan.jpg";
-import history from "../app/history.js";
+import ViewComponent from "./ViewComponent.js";
 
 const contentParagraphs = [
   "I'm Ryan, pleased to meet you. I'm a web developer in Detroit with a passion for making things that look and feel good.",
@@ -16,13 +14,7 @@ const funFacts = [
   "Go-to cocktail: Whiskey sour"
 ];
 
-export default class AboutView {
-  constructor() {
-    this.getAboutViewElement = this.getAboutViewElement.bind(this);
-    this.render = this.render.bind(this);
-    this.unmount = this.unmount.bind(this);
-  }
-
+export default class AboutView extends ViewComponent {
   getExternalLink(href, text) {
     // Need to wrap in a paragraph so that the link can have display: block without
     // making our actual anchor tag fill the full with of the page
@@ -77,17 +69,10 @@ export default class AboutView {
     return this.topListenedTrackElement;
   }
 
-  getAboutViewElement() {
-    if (this.aboutViewElement) {
-      clearTimeout(this.removeElementTimeout);
-      return this.aboutViewElement;
-    }
-
-    this.aboutViewElement = document.createElement("article");
-    this.aboutViewElement.classList.add("view");
-    this.aboutViewElement.id = "about-view";
-
-    this.aboutViewElement.appendChild(makeBackButton());
+  getViewElement() {
+    const aboutViewElement = document.createElement("article");
+    aboutViewElement.classList.add("view");
+    aboutViewElement.id = "about-view";
 
     const contentsWrapper = document.createElement("div");
     contentsWrapper.className = "contents-wrapper";
@@ -171,77 +156,8 @@ export default class AboutView {
       );
     }
 
-    this.aboutViewElement.appendChild(contentsWrapper);
+    aboutViewElement.appendChild(contentsWrapper);
 
-    if (history.isInitialPage) {
-      this.aboutViewElement.classList.add("visible");
-      const mainElement = document.body.querySelector("main");
-      mainElement.setAttribute("aria-hidden", true);
-      mainElement.style.visibility = "hidden";
-    } else {
-      // Delay applying the visibility styling so we can trigger a CSS transition
-      // We have to use this weird requestAnimationFrame + setTimeout combo as it seems to be the most effective cross-browser
-      // way to ensure we'll force the styles to re-calculate.
-      // Source: https://nolanlawson.com/2018/09/25/accurately-measuring-layout-on-the-web/
-      requestAnimationFrame(() => {
-        this.aboutViewElement.classList.remove("visible");
-
-        setTimeout(() => {
-          this.aboutViewElement.classList.add("visible");
-
-          setTimeout(() => {
-            const mainElement = document.body.querySelector("main");
-            mainElement.setAttribute("aria-hidden", true);
-            mainElement.style.visibility = "hidden";
-          }, 300);
-        });
-      });
-    }
-
-    return this.aboutViewElement;
-  }
-
-  onKeyDown(event) {
-    if (event.key === "Escape") {
-      history.push("/");
-
-      if (this.lastFocusedElement) {
-        this.lastFocusedElement.focus();
-      }
-    }
-  }
-
-  render() {
-    lockScrolling();
-
-    if (document.activeElement) {
-      this.lastFocusedElement = document.activeElement;
-    }
-
-    document.body.appendChild(this.getAboutViewElement());
-
-    // Add event listener to close the about view when escape is pressed
-    window.addEventListener("keydown", this.onKeyDown);
-  }
-
-  unmount() {
-    unlockScrolling();
-
-    const mainElement = document.body.querySelector("main");
-    mainElement.setAttribute("aria-hidden", false);
-    mainElement.style.visibility = "visible";
-
-    window.removeEventListener("keydown", this.onKeyDown);
-
-    if (this.aboutViewElement) {
-      this.aboutViewElement.classList.remove("visible");
-
-      // Remove the element on a delay after its hide transition is done
-      clearTimeout(this.removeElementTimeout);
-      this.removeElementTimeout = setTimeout(() => {
-        this.aboutViewElement.remove();
-        this.aboutViewElement = null;
-      }, 300);
-    }
+    return aboutViewElement;
   }
 }

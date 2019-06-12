@@ -6,10 +6,12 @@ import projects from "../constants/projects.js";
 import ProjectView from "../components/ProjectView.js";
 import HomePage from "../components/HomePage.js";
 import AboutView from "../components/AboutView.js";
+import ErrorView from "../components/ErrorView.js";
 
 class Router {
   constructor() {
     this.initialize = this.initialize.bind(this);
+    this.errorViewComponent = new ErrorView();
   }
 
   initialize() {
@@ -47,26 +49,25 @@ class Router {
     if (lastPath) {
       const lastRegisteredPath = this.registeredPaths[lastPath];
 
-      if (
-        lastRegisteredPath &&
-        lastRegisteredPath.component &&
-        lastRegisteredPath.component.unmount
-      ) {
+      if (!lastRegisteredPath) {
+        // If the last path exists but doesn't correspond to a registered path,
+        // it was an error page so we should unmount the error view
+        this.errorViewComponent.unmount();
+      } else if (lastRegisteredPath.component.unmount) {
         lastRegisteredPath.component.unmount();
       }
     }
 
     const registeredPath = this.registeredPaths[currentPath];
 
-    if (!registeredPath) return;
-
-    if (registeredPath.component) {
+    if (!registeredPath) {
+      // Render an error view to indicate that this is an invalid path
+      this.errorViewComponent.render();
+    } else {
       registeredPath.component.render();
-    }
 
-    // Update the document title if the registered path has a title we should use
-    if (registeredPath.title) {
-      document.title = registeredPath.title;
+      // Update the document title for the registered path
+      document.title = registeredPath.title || document.title;
     }
   }
 }

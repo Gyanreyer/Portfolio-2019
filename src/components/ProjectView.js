@@ -2,62 +2,48 @@ import history from "../app/history.js";
 
 import { getGithubIcon, getLinkIcon } from "../constants/svg_icons.js";
 import { lockScrolling, unlockScrolling } from "../utils/view.js";
-import { makeBackButton } from "./RouterLink.js";
+import ViewComponent from "./ViewComponent.js";
 
 import "./ProjectView.scss";
 
-export default class ProjectView {
+export default class ProjectView extends ViewComponent {
   constructor(project) {
-    this.project = project;
+    super();
 
-    this.getVideoElement = this.getVideoElement.bind(this);
-    this.ensureVideoIsPlaying = this.ensureVideoIsPlaying.bind(this);
-    this.getProjectLinks = this.getProjectLinks.bind(this);
-    this.getProjectTechnologiesList = this.getProjectTechnologiesList.bind(
-      this
-    );
-    this.getProjectViewElement = this.getProjectViewElement.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.render = this.render.bind(this);
+    this.project = project;
   }
 
   getVideoElement() {
-    this.video = document.createElement("video");
-    this.video.id = "project-video";
-    this.video.setAttribute("poster", this.project.image.src);
-    this.video.setAttribute("autoplay", true);
-    this.video.setAttribute("muted", true);
-    this.video.setAttribute("loop", true);
-    this.video.setAttribute("playsinline", true);
+    const videoElement = document.createElement("video");
+    videoElement.id = "project-video";
+    videoElement.setAttribute("poster", this.project.image.src);
+    videoElement.setAttribute("autoplay", true);
+    videoElement.setAttribute("muted", true);
+    videoElement.setAttribute("loop", true);
+    // Allows video to play on iOS without needing to take fullscreen
+    videoElement.setAttribute("playsinline", true);
 
-    this.project.videos.forEach(video => {
+    // Add source element for each project video source
+    this.project.videos.forEach(projectVideo => {
       const source = document.createElement("source");
-      source.src = video.src;
-      source.type = video.type;
+      source.src = projectVideo.src;
+      source.type = projectVideo.type;
 
-      this.video.appendChild(source);
+      videoElement.appendChild(source);
     });
 
-    return this.video;
-  }
+    videoElement.play().catch(() => {
+      // If the play promise was rejected, show controls on the video
+      // so the user can start it themselves
+      videoElement.setAttribute("controls", true);
 
-  ensureVideoIsPlaying() {
-    if (this.video.paused || this.video.ended || this.video.scrubbing) {
-      const playVideoPromise = this.video.play();
+      // When the video starts playing, remove the controls
+      videoElement.addEventListener("playing", () => {
+        videoElement.removeAttribute("controls");
+      });
+    });
 
-      if (playVideoPromise !== undefined) {
-        playVideoPromise.catch(() => {
-          // If the play promise was rejected, show controls on the video
-          // so the user can start it themselves
-          this.video.setAttribute("controls", true);
-
-          // When the video starts playing, remove the controls
-          this.video.addEventListener("playing", () => {
-            this.video.removeAttribute("controls");
-          });
-        });
-      }
-    }
+    return videoElement;
   }
 
   getProjectLinks() {
@@ -126,117 +112,46 @@ export default class ProjectView {
     return projectTechnologiesList;
   }
 
-  getProjectViewElement() {
-    if (this.projectViewElement) {
-      clearTimeout(this.removeElementTimeout);
-      return this.projectViewElement;
-    }
-
-    this.projectViewElement = document.createElement("article");
-    this.projectViewElement.id = "project-view";
-    this.projectViewElement.classList.add("view");
-    this.projectViewElement.style.backgroundColor = this.project.primaryColor;
+  getViewElement() {
+    const projectViewElement = document.createElement("article");
+    projectViewElement.id = "project-view";
+    projectViewElement.classList.add("view");
+    projectViewElement.style.backgroundColor = this.project.primaryColor;
 
     if (this.project.textTheme === "light") {
-      this.projectViewElement.classList.add("light-text");
+      projectViewElement.classList.add("light-text");
     }
-
-    // Back button returns to home
-    this.projectViewElement.appendChild(makeBackButton());
 
     // Header of page displays project name
     const projectTitle = document.createElement("h1");
     projectTitle.innerText = this.project.displayName;
-    this.projectViewElement.appendChild(projectTitle);
+    projectViewElement.appendChild(projectTitle);
 
     // Video element which plays preview
-    this.projectViewElement.appendChild(this.getVideoElement());
-    this.ensureVideoIsPlaying();
+    projectViewElement.appendChild(this.getVideoElement());
 
     // Website/github links for checking the project out
-    this.projectViewElement.appendChild(this.getProjectLinks());
+    projectViewElement.appendChild(this.getProjectLinks());
 
     // Description paragraph for project
     const projectDescription = document.createElement("p");
     projectDescription.className = "description";
     projectDescription.innerText = this.project.desc;
-    this.projectViewElement.appendChild(projectDescription);
+    projectViewElement.appendChild(projectDescription);
 
     // List of technologies used for project
-    this.projectViewElement.appendChild(this.getProjectTechnologiesList());
+    projectViewElement.appendChild(this.getProjectTechnologiesList());
 
-    if (history.isInitialPage) {
-      this.projectViewElement.classList.add("visible");
-      // Hide the primary contents hidden under the view so they don't interfere with tabbing focus
-      const mainElement = document.body.querySelector("main");
-      mainElement.setAttribute("aria-hidden", true);
-      mainElement.style.visibility = "hidden";
-    } else {
-      // Delay applying the visibility styling so we can trigger a CSS transition
-      // We have to use this weird requestAnimationFrame + setTimeout combo as it seems to be the most effective cross-browser
-      // way to ensure we'll force the styles to re-calculate.
-      // Source: https://nolanlawson.com/2018/09/25/accurately-measuring-layout-on-the-web/
-      requestAnimationFrame(() => {
-        this.projectViewElement.classList.remove("visible");
-
-        setTimeout(() => {
-          this.projectViewElement.classList.add("visible");
-
-          setTimeout(() => {
-            const mainElement = document.body.querySelector("main");
-            mainElement.setAttribute("aria-hidden", true);
-            mainElement.style.visibility = "hidden";
-          }, 300);
-        });
-      });
-    }
-
-    return this.projectViewElement;
-  }
-
-  onKeyDown(event) {
-    if (event.key === "Escape") {
-      history.push("/");
-
-      if (this.lastFocusedElement) {
-        this.lastFocusedElement.focus();
-      }
-    }
+    return projectViewElement;
   }
 
   render() {
-    lockScrolling();
-
-    if (document.activeElement) {
-      this.lastFocusedElement = document.activeElement;
-    }
-
-    document.body.appendChild(this.getProjectViewElement());
-
+    super.render();
     document.documentElement.style.backgroundColor = this.project.primaryColor;
-
-    // Add event listener to close the project view when escape is pressed
-    window.addEventListener("keydown", this.onKeyDown);
   }
 
   unmount() {
-    unlockScrolling();
-
+    super.unmount();
     document.documentElement.style.backgroundColor = null;
-    const mainElement = document.body.querySelector("main");
-    mainElement.setAttribute("aria-hidden", false);
-    mainElement.style.visibility = "visible";
-
-    window.removeEventListener("keydown", this.onKeyDown);
-
-    if (this.projectViewElement) {
-      this.projectViewElement.classList.remove("visible");
-      // Remove the project view element from the DOM
-      clearTimeout(this.removeElementTimeout);
-      this.removeElementTimeout = setTimeout(() => {
-        this.projectViewElement.remove();
-        this.projectViewElement = null;
-      }, 300);
-    }
   }
 }
