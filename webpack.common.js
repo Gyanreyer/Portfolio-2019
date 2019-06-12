@@ -51,6 +51,9 @@ module.exports = {
       },
       {
         from: "./src/sitemap.xml"
+      },
+      {
+        from: "./src/resources/downloads"
       }
     ]),
     new MiniCssExtractPlugin({
