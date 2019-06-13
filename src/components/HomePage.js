@@ -1,7 +1,6 @@
 import "./HomePage.scss";
 import projects from "../constants/projects.js";
 import { smoothScroll } from "../utils/view.js";
-
 import makeRouterLink, { onClickRouterLink } from "./RouterLink.js";
 import { getForwardArrowIcon } from "../constants/svg_icons.js";
 

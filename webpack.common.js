@@ -61,6 +61,7 @@ module.exports = {
     }),
     new HTMLWebpackPlugin({
       template: "./src/index.html",
+      favicon: "./src/resources/icons/favicon.ico",
       minify: {
         collapseWhitespace: true,
         removeComments: true,
