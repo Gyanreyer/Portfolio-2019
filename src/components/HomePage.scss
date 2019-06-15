@@ -132,7 +132,7 @@ footer {
       }
 
       @media #{$breakpoint-medium-up} {
-        &:hover {
+        &.hovering {
           opacity: 0.85;
           transform: translateY(-3%);
         }
@@ -147,10 +147,6 @@ footer {
 
     p {
       margin: 0 0 0.3em;
-    }
-
-    .description {
-      text-indent: 1em;
     }
 
     .text-link {

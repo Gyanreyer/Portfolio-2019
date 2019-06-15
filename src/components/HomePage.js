@@ -128,9 +128,11 @@ class ProjectThumbnail {
     imageWrapperLink.appendChild(this.getThumbnailVideoElement());
 
     imageWrapperLink.addEventListener("mouseenter", () => {
+      imageWrapperLink.classList.add("hovering");
       this.startPlayingVideo();
     });
     imageWrapperLink.addEventListener("mouseleave", () => {
+      imageWrapperLink.classList.remove("hovering");
       this.hideVideo();
     });
 
@@ -141,7 +143,6 @@ class ProjectThumbnail {
     thumbnailCaption.appendChild(this.getProjectTitle());
 
     const projectDescription = document.createElement("p");
-    projectDescription.className = "description";
     projectDescription.innerText = this.project.shortDesc;
     thumbnailCaption.appendChild(projectDescription);
 
@@ -157,9 +158,11 @@ class ProjectThumbnail {
     readMoreLink.tabIndex = -1;
     readMoreLink.appendChild(getForwardArrowIcon());
     readMoreLink.addEventListener("mouseenter", () => {
+      imageWrapperLink.classList.add("hovering");
       this.startPlayingVideo();
     });
     readMoreLink.addEventListener("mouseleave", () => {
+      imageWrapperLink.classList.remove("hovering");
       this.hideVideo();
     });
 
