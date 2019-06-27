@@ -50,30 +50,6 @@ class History {
       window.location.pathname = pathname;
     }
   }
-
-  replace(pathname, state) {
-    const newSanitizedPath = getSanitizedPathname(pathname);
-
-    // Return early if the paths are the same
-    if (newSanitizedPath === this.currentPath) return;
-
-    if (window.history && window.history.replaceState) {
-      this.lastPath = getSanitizedPathname();
-      this.currentPath = newSanitizedPath;
-
-      window.history.replaceState(
-        state || {
-          page: pathname
-        },
-        "Ryan Geyer | Creative Web Developer in Detroit",
-        pathname
-      );
-      Router.render(this.currentPath, this.lastPath);
-    } else {
-      // If history manipulation isn't supported, directly set the path name - this will trigger a hard load
-      window.location.pathname = pathname;
-    }
-  }
 }
 
 // Export a singleton instance of history

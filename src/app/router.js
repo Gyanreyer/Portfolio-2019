@@ -19,11 +19,15 @@ class Router {
     this.registeredPaths = {
       "/": {
         component: new HomePage(),
-        title: "Ryan Geyer | Creative Web Developer in Detroit"
+        title: "Ryan Geyer | Creative Web Developer in Detroit",
+        description:
+          "Hi, I'm Ryan Geyer. I'm a web developer based in Detroit with a passion for building things that look and feel good."
       },
       "/about": {
         component: new AboutView(),
-        title: "Ryan Geyer | About Me"
+        title: "Ryan Geyer | About Me",
+        description:
+          "Hi, I'm Ryan Geyer. I'm a web developer based in Detroit with a passion for building things that look and feel good."
       }
     };
 
@@ -32,7 +36,8 @@ class Router {
 
       this.registeredPaths[`/projects/${project.name}`] = {
         component: new ProjectView(project),
-        title: `Projects | ${project.displayName}`
+        title: `Projects | ${project.displayName}`,
+        description: project.shortDesc
       };
     }
 
@@ -67,7 +72,12 @@ class Router {
       registeredPath.component.render();
 
       // Update the document title for the registered path
-      document.title = registeredPath.title || document.title;
+      document.title = registeredPath.title;
+
+      // Update the meta description for the registered path
+      document
+        .querySelector('meta[name="description"]')
+        .setAttribute("content", registeredPath.description);
     }
   }
 }

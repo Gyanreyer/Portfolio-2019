@@ -1,7 +1,4 @@
-import history from "../app/history.js";
-
 import { getGithubIcon, getLinkIcon } from "../constants/svg_icons.js";
-import { lockScrolling, unlockScrolling } from "../utils/view.js";
 import ViewComponent from "./ViewComponent.js";
 
 import "./ProjectView.scss";
