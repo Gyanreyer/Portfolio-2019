@@ -3,34 +3,27 @@
 @font-face {
   font-family: LeagueSpartan;
   font-display: swap;
-  src: url('./fonts/LeagueSpartan-Bold.otf') format('opentype');
+  src: url('./fonts/LeagueSpartan-Bold.woff2') format('woff2'), url('./fonts/LeagueSpartan-Bold.woff') format('woff'), url('./fonts/LeagueSpartan-Bold.eot') format('embedded-opentype'), url('./fonts/LeagueSpartan-Bold.otf') format('opentype');
   font-weight: $fontWeightBold;
 }
 
 @font-face {
   font-family: Aileron;
   font-display: swap;
-  src: url('./fonts/Aileron-Light.otf') format('opentype');
+  src: url('./fonts/Aileron-Light.woff2') format('woff2'), url('./fonts/Aileron-Light.woff') format('woff'), url('./fonts/Aileron-Light.eot') format('embedded-opentype'), url('./fonts/Aileron-Light.otf') format('opentype');
   font-weight: $fontWeightLight;
 }
 
 @font-face {
   font-family: Aileron;
   font-display: swap;
-  src: url('./fonts/Aileron-SemiBold.otf') format('opentype');
+  src: url('./fonts/Aileron-SemiBold.woff2') format('woff2'), url('./fonts/Aileron-SemiBold.woff') format('woff'), url('./fonts/Aileron-SemiBold.eot') format('embedded-opentype'), url('./fonts/Aileron-SemiBold.otf') format('opentype');
   font-weight: $fontWeightSemiBold;
-}
-
-@font-face {
-  font-family: Aileron;
-  font-display: swap;
-  src: url('./fonts/Aileron-Bold.otf') format('opentype');
-  font-weight: $fontWeightBold;
 }
 
 html {
   // Default site-wide font is Aileron-Light
-  font-family: Aileron;
+  font-family: Aileron, sans-serif;
   font-weight: $fontWeightLight;
   min-height: 100vh;
   color: $baseDarkColor;

@@ -31,7 +31,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(otf|mp4|webm)$/,
+        test: /\.(otf|eot|woff|woff2|mp4|webm)$/,
         loader: "file-loader?name=[name].[ext]"
       },
       {
