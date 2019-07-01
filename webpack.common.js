@@ -2,6 +2,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const ImageminPlugin = require("imagemin-webpack-plugin").default;
 
 module.exports = {
   entry: ["@babel/polyfill", "./src/index.js"],
@@ -25,9 +26,7 @@ module.exports = {
         test: /\.(jpe?g|png)$/i,
         loader: "responsive-loader",
         options: {
-          sizes: [1000, 720, 480, 360],
-          placeholder: true,
-          placeholderSize: 48
+          sizes: [1000, 720, 480, 360]
         }
       },
       {
@@ -70,6 +69,10 @@ module.exports = {
         removeStyleLinkTypeAttributes: true,
         useShortDoctype: true
       }
+    }),
+    new ImageminPlugin({
+      test: /\.(jpe?g|png)$/i,
+      jpegtran: { progressive: true }
     })
   ]
 };
